@@ -63,11 +63,6 @@ namespace SvgViewer
                         CollectFiles(item);
                     }
                 }
-
-                if (Directory.GetDirectories(rootPath).Any())
-                {
-                    return;
-                }
             }
             catch (Exception)
             {
