@@ -72,7 +72,7 @@ namespace SvgViewer
             catch (Exception)
             {
 #if DEBUG
-                //throw;
+                throw;
 #endif
             }
         }
