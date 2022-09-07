@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="SvgViewer.ItemCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SvgViewer"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             
+             mc:Ignorable="d" 
+             Height="150" Width="150"
+             d:DesignHeight="450" d:DesignWidth="450">
+    <Grid x:Name="MainGrid" d:Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <svgc:SvgViewbox x:Name="SvgPlace" Grid.Row="0" d:Source="/delete_4.4.0.0076.svg"></svgc:SvgViewbox>
+        <TextBlock x:Name="NameTextblock" Grid.Row="1" d:Text="Наименование изображения" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Margin="2 5 2 0"></TextBlock>
+        <Popup IsOpen="{Binding ElementName=MainGrid, Path=IsMouseOver, Mode=OneWay}"
+               Placement="MousePoint" AllowsTransparency="True" PopupAnimation="Fade" Focusable="False">
+            <Border CornerRadius="3" Background="White" BorderThickness="1" BorderBrush="#d1d1d1" Padding="1">
+                <TextBlock Text="{Binding ElementName=NameTextblock, Path=Text}"/>
+            </Border>
+        </Popup>
+        <Popup x:Name="IsCopiedPopup"
+               Placement="Bottom" AllowsTransparency="True" PopupAnimation="Fade" Focusable="False">
+            <Border CornerRadius="3" Background="White" BorderThickness="1" BorderBrush="#d1d1d1" Padding="1">
+                <TextBlock Text="Скопировано в буфер обмена!"/>
+            </Border>
+        </Popup>
+    </Grid>
+
+</UserControl>
