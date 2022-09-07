@@ -13,6 +13,8 @@ namespace SvgViewer
     {
         ObservableCollection<string> pathsSvg = new ObservableCollection<string>();
 
+        public delegate void NewDelegate(string path);
+
         public MainWindow()
         {
             InitializeComponent();
