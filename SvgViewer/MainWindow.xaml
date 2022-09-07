@@ -16,10 +16,10 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Row="0" Grid.Column="0" Margin="2" >
-            <TextBlock Text="Директория" VerticalAlignment="Center"></TextBlock>
+            <TextBlock Text="Directory" VerticalAlignment="Center"></TextBlock>
             <TextBox x:Name="DirectoryPathTextbox" d:Text="d:/path/to/file.svg" HorizontalAlignment="Stretch" Margin="3" TextChanged="DirectoryPathTextbox_TextChanged"></TextBox>
         </DockPanel>
-        <CheckBox x:Name="InnerDirectoriesCheckbox" IsChecked="False" Grid.Column="1" Content="С вложением" VerticalAlignment="Center" Width="110"></CheckBox>
+        <CheckBox x:Name="InnerDirectoriesCheckbox" IsChecked="False" Grid.Column="1" Content="Subfolders" VerticalAlignment="Center" Width="110"></CheckBox>
         <ScrollViewer Grid.Row="1" Margin="5" Grid.ColumnSpan="2">
             <WrapPanel x:Name="MainWrapPanel"  />
         </ScrollViewer>

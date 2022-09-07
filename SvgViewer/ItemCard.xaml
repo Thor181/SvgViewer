@@ -15,7 +15,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <svgc:SvgViewbox x:Name="SvgPlace" Grid.Row="0" d:Source="/delete_4.4.0.0076.svg"></svgc:SvgViewbox>
-        <TextBlock x:Name="NameTextblock" Grid.Row="1" d:Text="Наименование изображения" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Margin="2 5 2 0"></TextBlock>
+        <TextBlock x:Name="NameTextblock" Grid.Row="1" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Margin="2 5 2 0"></TextBlock>
         <Popup IsOpen="{Binding ElementName=MainGrid, Path=IsMouseOver, Mode=OneWay}"
                Placement="MousePoint" AllowsTransparency="True" PopupAnimation="Fade" Focusable="False">
             <Border CornerRadius="3" Background="White" BorderThickness="1" BorderBrush="#d1d1d1" Padding="1">
