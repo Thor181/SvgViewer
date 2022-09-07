@@ -1,32 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace SvgViewer
 {
-    /// <summary>
-    /// Логика взаимодействия для ItemCard.xaml
-    /// </summary>
     public partial class ItemCard : UserControl
     {
-        private string _fullPath = default;
+        public string FullPath { get; set; }
+
         private ItemCard()
         {
             InitializeComponent();
+        }
+
+        public ItemCard(string imagePath) : this()
+        {
+            FullPath = imagePath;
+            SvgPlace.Source = new Uri(imagePath);
+            NameTextblock.Text = Path.GetFileName(imagePath);
             MainGrid.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs e)
             {
-                Clipboard.SetText(_fullPath ?? "");
+                Clipboard.SetText(FullPath ?? "");
                 Task.Run(() =>
                 {
                     Dispatcher.Invoke(async () =>
@@ -37,15 +34,6 @@ namespace SvgViewer
                     });
                 });
             };
-        }
-        public ItemCard(string imagePath) : this()
-        {
-            if (!imagePath.Contains(".svg"))
-                return;
-
-            _fullPath = imagePath;
-            SvgPlace.Source = new Uri(imagePath);
-            NameTextblock.Text = Path.GetFileName(imagePath);
         }
     }
 }

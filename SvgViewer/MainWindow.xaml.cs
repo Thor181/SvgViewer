@@ -1,26 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SvgViewer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         ObservableCollection<string> pathsSvg = new ObservableCollection<string>();
@@ -54,10 +42,20 @@ namespace SvgViewer
             try
             {
                 string[] filePaths = Directory.GetFiles(rootPath);
-                foreach (var item in filePaths)
+                Task.Run(() =>
                 {
-                    pathsSvg.Add(item);
-                }
+                    Dispatcher.Invoke(() =>
+                    {
+                        foreach (var item in filePaths)
+                        {
+                            if (item.Contains(".svg") && !pathsSvg.Contains(item))
+                            {
+                                pathsSvg.Add(item);
+                            }
+                        }
+                    });
+                });
+
                 if (InnerDirectoriesCheckbox.IsChecked == true)
                 {
                     foreach (var item in Directory.GetDirectories(rootPath))
@@ -74,7 +72,7 @@ namespace SvgViewer
             catch (Exception)
             {
 #if DEBUG
-                throw;
+                //throw;
 #endif
             }
         }
