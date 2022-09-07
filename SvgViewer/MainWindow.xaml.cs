@@ -30,7 +30,6 @@ namespace SvgViewer
             InitializeComponent();
             pathsSvg.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
             {
-                //MainWrapPanel.Children.Clear();
                 foreach (var item in e.NewItems)
                 {
                     MainWrapPanel.Children.Add(new ItemCard(item.ToString()));
@@ -74,7 +73,9 @@ namespace SvgViewer
             }
             catch (Exception)
             {
-
+#if DEBUG
+                throw;
+#endif
             }
         }
     }
