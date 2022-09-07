@@ -9,7 +9,7 @@ namespace SvgViewer
 {
     public partial class ItemCard : UserControl
     {
-        public string FullPath { get; set; }
+        public string FullPath { get; private set; }
 
         private ItemCard()
         {
