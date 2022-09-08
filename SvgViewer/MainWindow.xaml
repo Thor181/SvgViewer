@@ -5,22 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SvgViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        x:Name="MainWindowX"
+        Title="SvgViewer" Height="450" Width="800"
+         >
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="90" />
         </Grid.ColumnDefinitions>
+
         <DockPanel Grid.Row="0" Grid.Column="0" Margin="2" >
-            <TextBlock Text="Directory" VerticalAlignment="Center"></TextBlock>
-            <TextBox x:Name="DirectoryPathTextbox" d:Text="d:/path/to/file.svg" HorizontalAlignment="Stretch" Margin="3" TextChanged="DirectoryPathTextbox_TextChanged"></TextBox>
+            <TextBlock Text="Directory" VerticalAlignment="Center"/>
+            <TextBox x:Name="DirectoryPathTextbox" d:Text="d:/path/to/file.svg" 
+                     HorizontalAlignment="Stretch" Margin="3" TextChanged="DirectoryPathTextbox_TextChanged">
+            </TextBox>
         </DockPanel>
-        <CheckBox x:Name="InnerDirectoriesCheckbox" IsChecked="False" Grid.Column="1" Content="Subfolders" VerticalAlignment="Center" Width="110"></CheckBox>
-        <ScrollViewer Grid.Row="1" Margin="5" Grid.ColumnSpan="2">
+
+        <Popup x:Name="LastDirsPopup" IsOpen="{Binding ElementName=DirectoryPathTextbox, Path=IsFocused, Mode=OneWay}" 
+               PlacementTarget="{Binding ElementName=DirectoryPathTextbox}" Placement="Bottom">
+            <ListBox x:Name="LastDirectoriesListbox" ItemsSource="{Binding ElementName=MainWindowX, Path=LastDirectories}">
+                
+            </ListBox>
+        </Popup>
+
+        <DockPanel Grid.Row="0" Grid.Column="1">
+            <TextBlock Text="Search" VerticalAlignment="Center"/>
+            <TextBox x:Name="SearchTextbox" Margin="3" VerticalContentAlignment="Center"/>
+        </DockPanel>
+
+        <CheckBox x:Name="InnerDirectoriesCheckbox" IsChecked="True" 
+                  Grid.Column="2" Content="Subfolders" 
+                  VerticalAlignment="Center" Width="110"/>
+
+        <ScrollViewer Grid.Row="1" Margin="5" Grid.ColumnSpan="3">
             <WrapPanel x:Name="MainWrapPanel"  />
         </ScrollViewer>
 

@@ -10,6 +10,7 @@ namespace SvgViewer
     public partial class ItemCard : UserControl
     {
         public string FullPath { get; private set; }
+        public string FileName { get; private set; }
 
         private ItemCard()
         {
@@ -18,7 +19,9 @@ namespace SvgViewer
 
         public ItemCard(string imagePath) : this()
         {
+            NonVisibleLabel.Content = imagePath;
             FullPath = imagePath;
+            FileName = Path.GetFileName(imagePath);
             SvgPlace.Source = new Uri(imagePath);
             NameTextblock.Text = Path.GetFileName(imagePath);
             MainGrid.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs e)

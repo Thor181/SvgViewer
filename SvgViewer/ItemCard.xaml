@@ -13,12 +13,13 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
+        <Label x:Name="NonVisibleLabel" Visibility="Collapsed"></Label>
         <svgc:SvgViewbox x:Name="SvgPlace" Grid.Row="0" d:Source="/delete_4.4.0.0076.svg"></svgc:SvgViewbox>
         <TextBlock x:Name="NameTextblock" Grid.Row="1" HorizontalAlignment="Center" TextTrimming="WordEllipsis" Margin="2 5 2 0"></TextBlock>
-        <Popup IsOpen="{Binding ElementName=ItemCardUserControl, Path=IsMouseOver, Mode=OneWay}"
+        <Popup IsOpen="{Binding ElementName=ItemCardUserControl, Path=IsMouseOver, Mode=OneWay}" 
                Placement="MousePoint" AllowsTransparency="True" PopupAnimation="Fade" Focusable="False">
             <Border CornerRadius="3" Background="White" BorderThickness="1" BorderBrush="#d1d1d1" Padding="1">
-                <TextBlock Text="{Binding ElementName=ItemCardUserControl, Path=FullPath, Mode=OneWay}"/>
+                <TextBlock Text="{Binding ElementName=NonVisibleLabel, Path=Content, Mode=OneWay}"/>
             </Border>
         </Popup>
         <Popup x:Name="IsCopiedPopup"
