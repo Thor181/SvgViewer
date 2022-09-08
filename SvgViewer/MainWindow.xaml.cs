@@ -55,7 +55,7 @@ namespace SvgViewer
             LastDirectoriesListbox.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
                 DirectoryPathTextbox.Text = ((ListBox)sender).SelectedItem.ToString();
 
-            MainWindowX.Deactivated += (object sender, EventArgs e) => MainWindowX.Focus();
+            MainWindowX.Deactivated += (object sender, EventArgs e) => MainWrapPanel.Focus();
         }
 
         private void DirectoryPathTextbox_TextChanged(object sender, TextChangedEventArgs e)
