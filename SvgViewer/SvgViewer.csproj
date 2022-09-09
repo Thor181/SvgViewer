@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>apply_widget_set_4.4.0.0076.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

@@ -13,10 +13,7 @@ namespace SvgViewer
     public partial class MainWindow : Window
     {
         private ObservableCollection<string> pathsSvg = new ObservableCollection<string>();
-        public IEnumerable<string> LastDirectories
-        {
-            get => DirectoriesWorker.ReadFromFile();
-        }
+        public IEnumerable<string> LastDirectories => DirectoriesWorker.ReadFromFile();
 
         public MainWindow()
         {
@@ -34,10 +31,10 @@ namespace SvgViewer
                 }
             };
 
-            SearchTextbox.TextChanged += delegate (object sender, TextChangedEventArgs e)
+            SearchTextbox.TextChanged += async delegate (object sender, TextChangedEventArgs e)
             {
                 var tempText = ((TextBox)sender).Text.ToLower();
-                Task.Delay(500);
+                await Task.Delay(1000);
 
                 if (!((TextBox)sender).Text.ToLower().Equals(tempText))
                     return;
@@ -98,11 +95,11 @@ namespace SvgViewer
                     }
                 }
             }
-            catch (Exception)
+            catch (UnauthorizedAccessException)
             {
-#if !DEBUG
-                throw;
-#endif
+//#if DEBUG
+//                throw;
+//#endif
             }
         }
     }
