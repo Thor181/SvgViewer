@@ -34,10 +34,10 @@ namespace SvgViewer
                 }
             };
 
-            SearchTextbox.TextChanged += async delegate (object sender, TextChangedEventArgs e)
+            SearchTextbox.TextChanged += delegate (object sender, TextChangedEventArgs e)
             {
                 var tempText = ((TextBox)sender).Text.ToLower();
-                await Task.Delay(500);
+                Task.Delay(500);
 
                 if (!((TextBox)sender).Text.ToLower().Equals(tempText))
                     return;
