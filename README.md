@@ -1,4 +1,4 @@
-# SvgViewer
+# SvgViewer 
 Simple program to view all .svg files in directory (including subfolders).
 
 Click at picture will copy full path to file in clipboard.
