@@ -48,10 +48,12 @@ namespace SvgViewer
         private async void DirectoryPathTextbox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string text = ((TextBox)sender).Text;
-            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrEmpty(text))
+            if (string.IsNullOrWhiteSpace(text))
                 return;
 
-            DirectoriesWorker.WriteToFile(text);
+            if (!LastDirectoriesListbox.Items.Contains(text))
+                DirectoriesWorker.WriteToFile(text);
+
             await CollectFiles(text);
         }
 
@@ -89,6 +91,10 @@ namespace SvgViewer
                 var subfolders = Directory.GetDirectories(rootPath);
                 foreach (var subfolder in subfolders)
                     await CollectFiles(subfolder);
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
             }
             catch (UnauthorizedAccessException)
             {

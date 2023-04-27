@@ -31,15 +31,14 @@ namespace SvgViewer
                 if (IsPath(path))
                 {
                     lastDirs.ToList().Insert(0, path);
+                    File.Delete(PathsFile);
                     File.AppendAllLines(PathsFile, lastDirs.Take(10));
                     return;
                 }
             }
 
             if (IsPath(path))
-            {
                 File.AppendAllText(PathsFile, path + "\n");
-            }
         }
 
         public static IEnumerable<string> ReadFromFile()
@@ -49,7 +48,7 @@ namespace SvgViewer
 
             var lastDirs = File.ReadAllText(PathsFile)
                 .Split("\n")
-                .Where(x => !(string.IsNullOrEmpty(x) && string.IsNullOrWhiteSpace(x)))
+                .Where(x => !string.IsNullOrWhiteSpace(x))
                 .Reverse();
 
             return lastDirs;
