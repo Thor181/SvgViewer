@@ -12,7 +12,6 @@ namespace SvgViewer
 {
     public partial class MainWindow : Window
     {
-        private ObservableCollection<string> pathsSvg = new ObservableCollection<string>();
         public IEnumerable<string> LastDirectories => DirectoriesWorker.ReadFromFile();
 
         public MainWindow()
@@ -23,14 +22,6 @@ namespace SvgViewer
 
         private void InitializeDelegates()
         {
-            pathsSvg.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
-            {
-                foreach (var item in e.NewItems)
-                {
-                    MainWrapPanel.Children.Add(new ItemCard(item.ToString()));
-                }
-            };
-
             SearchTextbox.TextChanged += async delegate (object sender, TextChangedEventArgs e)
             {
                 var tempText = ((TextBox)sender).Text.ToLower();
@@ -40,12 +31,11 @@ namespace SvgViewer
                     return;
 
                 var searchText = ((TextBox)sender).Text.ToLower();
-                var filteredCollection = pathsSvg.Where(x => Path.GetFileName(x.ToLower()).Contains(searchText));
 
-                MainWrapPanel.Children.Clear();
-                foreach (var item in filteredCollection)
+                foreach (var item in MainWrapPanel.Children)
                 {
-                    MainWrapPanel.Children.Add(new ItemCard(item.ToString()));
+                    if (item is ItemCard card)
+                        card.Visibility = !card.FileName.Contains(searchText) ? Visibility.Collapsed : Visibility.Visible;
                 }
             };
 
@@ -55,51 +45,53 @@ namespace SvgViewer
             MainWindowX.Deactivated += (object sender, EventArgs e) => MainWrapPanel.Focus();
         }
 
-        private void DirectoryPathTextbox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void DirectoryPathTextbox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string text = ((TextBox)sender).Text;
             if (string.IsNullOrWhiteSpace(text) || string.IsNullOrEmpty(text))
                 return;
 
             DirectoriesWorker.WriteToFile(text);
-            CollectFiles(text);
+            await CollectFiles(text);
         }
 
-        private void CollectFiles(string rootPath)
+        private async Task CollectFiles(string rootPath)
         {
             if (!rootPath.Contains(":\\"))
                 return;
 
+            System.Collections.Concurrent.ConcurrentBag<ItemCard> cards = new();
+
             try
             {
                 string[] filePaths = Directory.GetFiles(rootPath);
-                Task.Run(() =>
+                await Task.Run(async () =>
                 {
-                    Dispatcher.Invoke(() =>
+                    Parallel.ForEach(filePaths, x =>
                     {
-                        foreach (var item in filePaths)
+                        Dispatcher.Invoke(() =>
                         {
-                            if (item.Contains(".svg") && !pathsSvg.Contains(item))
-                            {
-                                pathsSvg.Add(item);
-                            }
-                        }
+                            if (x.Contains(".svg"))
+                                cards.Add(new ItemCard(x));
+                        });
                     });
+
+                    foreach (var item in cards)
+                    {
+                        await Dispatcher.InvokeAsync(() =>
+                        {
+                            MainWrapPanel.Children.Add(item);
+                            CountTextblock.Text = MainWrapPanel.Children.Count.ToString();
+                        });
+                    }
                 });
 
-                if (InnerDirectoriesCheckbox.IsChecked == true)
-                {
-                    foreach (var item in Directory.GetDirectories(rootPath))
-                    {
-                        CollectFiles(item);
-                    }
-                }
+                var subfolders = Directory.GetDirectories(rootPath);
+                foreach (var subfolder in subfolders)
+                    await CollectFiles(subfolder);
             }
             catch (UnauthorizedAccessException)
             {
-//#if DEBUG
-//                throw;
-//#endif
             }
         }
     }
