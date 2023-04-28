@@ -75,7 +75,11 @@ namespace SvgViewer
                         Dispatcher.Invoke(() =>
                         {
                             if (x.Contains(".svg"))
-                                cards.Add(new ItemCard(x));
+                            {
+                                var card = new ItemCard(x);
+                                card.Copied += Card_Copied;
+                                cards.Add(card);
+                            }
                         });
                     });
 
@@ -89,9 +93,13 @@ namespace SvgViewer
                     }
                 });
 
-                var subfolders = Directory.GetDirectories(rootPath);
-                foreach (var subfolder in subfolders)
-                    await CollectFiles(subfolder);
+
+                if (InnerDirectoriesCheckbox.IsChecked == true)
+                {
+                    var subfolders = Directory.GetDirectories(rootPath);
+                    foreach (var subfolder in subfolders)
+                        await CollectFiles(subfolder);
+                }
             }
             catch (DirectoryNotFoundException ex)
             {
@@ -100,6 +108,15 @@ namespace SvgViewer
             catch (UnauthorizedAccessException)
             {
             }
+        }
+
+        private void Card_Copied(ItemCard sender)
+        {
+            if (SecondWrapPanel.Children.Count == 10)
+                SecondWrapPanel.Children.RemoveAt(9);
+
+            //SecondWrapPanel.Children.Add(sender.Clone());
+            SecondWrapPanel.Children.Insert(0, sender.Clone());
         }
     }
 }

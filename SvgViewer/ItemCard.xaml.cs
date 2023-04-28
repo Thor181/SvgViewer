@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,16 +10,22 @@ namespace SvgViewer
 {
     public partial class ItemCard : UserControl
     {
+        private string _filePath;
         public string FileName { get; private set; }
+
+        public delegate void CopyHandler(ItemCard sender);
+        public event CopyHandler Copied;
 
         private ItemCard()
         {
             InitializeComponent();
+            CopyHandler copyHandler = delegate (ItemCard sender) { };
         }
 
         public ItemCard(string imagePath) : this()
         {
             NonVisibleLabel.Content = imagePath;
+            _filePath = imagePath;
             FileName = Path.GetFileName(imagePath);
             SvgPlace.Source = new Uri(imagePath);
             NameTextblock.Text = Path.GetFileName(imagePath);
@@ -29,12 +36,19 @@ namespace SvgViewer
                 {
                     Dispatcher.Invoke(async () =>
                     {
+                        Copied?.Invoke(this);
+
                         IsCopiedPopup.IsOpen = true;
                         await Task.Delay(1500);
                         IsCopiedPopup.IsOpen = false;
                     });
                 });
             };
+        }
+
+        public ItemCard Clone()
+        {
+            return new ItemCard(_filePath);
         }
     }
 }
