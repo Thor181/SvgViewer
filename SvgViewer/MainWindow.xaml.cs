@@ -35,7 +35,8 @@ namespace SvgViewer
                 foreach (var item in MainWrapPanel.Children)
                 {
                     if (item is ItemCard card)
-                        card.Visibility = !card.FileName.Contains(searchText) ? Visibility.Collapsed : Visibility.Visible;
+                        card.Visibility = !card.FileName.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) 
+                            ? Visibility.Collapsed : Visibility.Visible;
                 }
             };
 
