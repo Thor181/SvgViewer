@@ -115,7 +115,6 @@ namespace SvgViewer
             if (SecondWrapPanel.Children.Count == 10)
                 SecondWrapPanel.Children.RemoveAt(9);
 
-            //SecondWrapPanel.Children.Add(sender.Clone());
             SecondWrapPanel.Children.Insert(0, sender.Clone());
         }
     }
