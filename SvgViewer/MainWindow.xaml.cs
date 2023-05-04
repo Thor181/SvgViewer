@@ -13,6 +13,7 @@ namespace SvgViewer
     public partial class MainWindow : Window
     {
         public IEnumerable<string> LastDirectories => DirectoriesWorker.ReadFromFile();
+        private const int MaxCountLastFiles = 20;
 
         public MainWindow()
         {
@@ -93,7 +94,6 @@ namespace SvgViewer
                     }
                 });
 
-
                 if (InnerDirectoriesCheckbox.IsChecked == true)
                 {
                     var subfolders = Directory.GetDirectories(rootPath);
@@ -112,8 +112,8 @@ namespace SvgViewer
 
         private void Card_Copied(ItemCard sender)
         {
-            if (SecondWrapPanel.Children.Count == 10)
-                SecondWrapPanel.Children.RemoveAt(9);
+            if (SecondWrapPanel.Children.Count == MaxCountLastFiles)
+                SecondWrapPanel.Children.RemoveAt(MaxCountLastFiles - 1);
 
             SecondWrapPanel.Children.Insert(0, sender.Clone());
         }
