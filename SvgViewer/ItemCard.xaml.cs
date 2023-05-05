@@ -10,7 +10,7 @@ namespace SvgViewer
 {
     public partial class ItemCard : UserControl
     {
-        private string _filePath;
+        public string FilePath { get; private set; }
         public string FileName { get; private set; }
 
         public delegate void CopyHandler(ItemCard sender);
@@ -25,7 +25,7 @@ namespace SvgViewer
         public ItemCard(string imagePath) : this()
         {
             NonVisibleLabel.Content = imagePath;
-            _filePath = imagePath;
+            FilePath = imagePath;
             FileName = Path.GetFileName(imagePath);
             SvgPlace.Source = new Uri(imagePath);
             NameTextblock.Text = Path.GetFileName(imagePath);
@@ -48,7 +48,7 @@ namespace SvgViewer
 
         public ItemCard Clone()
         {
-            return new ItemCard(_filePath);
+            return new ItemCard(FilePath);
         }
     }
 }

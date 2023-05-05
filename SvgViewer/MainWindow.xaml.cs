@@ -12,13 +12,24 @@ namespace SvgViewer
 {
     public partial class MainWindow : Window
     {
-        public IEnumerable<string> LastDirectories => DirectoriesWorker.ReadFromFile();
-        private const int MaxCountLastFiles = 20;
+        public ConfigWorker ConfigWorker { get; set; }
 
         public MainWindow()
         {
+            ConfigWorker = new ConfigWorker();
             InitializeComponent();
+            InitializeLastFiles();
             InitializeDelegates();
+        }
+
+        private void InitializeLastFiles()
+        {
+            var lastFiles = ConfigWorker.LastFiles;
+            foreach (var file in lastFiles)
+            {
+                if (File.Exists(file))
+                    AddLastFileToSecondWrapPanel(new ItemCard(file));
+            }
         }
 
         private void InitializeDelegates()
@@ -36,7 +47,7 @@ namespace SvgViewer
                 foreach (var item in MainWrapPanel.Children)
                 {
                     if (item is ItemCard card)
-                        card.Visibility = !card.FileName.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) 
+                        card.Visibility = !card.FileName.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)
                             ? Visibility.Collapsed : Visibility.Visible;
                 }
             };
@@ -54,7 +65,7 @@ namespace SvgViewer
                 return;
 
             if (!LastDirectoriesListbox.Items.Contains(text))
-                DirectoriesWorker.WriteToFile(text);
+                ConfigWorker.AddLastDirectory(text);
 
             await CollectFiles(text);
         }
@@ -68,19 +79,16 @@ namespace SvgViewer
 
             try
             {
-                string[] filePaths = Directory.GetFiles(rootPath);
+                string[] filePaths = Directory.GetFiles(rootPath).Where(x => x.Contains(".svg")).ToArray();
                 await Task.Run(async () =>
                 {
                     Parallel.ForEach(filePaths, x =>
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            if (x.Contains(".svg"))
-                            {
-                                var card = new ItemCard(x);
-                                card.Copied += Card_Copied;
-                                cards.Add(card);
-                            }
+                            var card = new ItemCard(x);
+                            card.Copied += Card_Copied;
+                            cards.Add(card);
                         });
                     });
 
@@ -112,10 +120,17 @@ namespace SvgViewer
 
         private void Card_Copied(ItemCard sender)
         {
-            if (SecondWrapPanel.Children.Count == MaxCountLastFiles)
-                SecondWrapPanel.Children.RemoveAt(MaxCountLastFiles - 1);
-
-            SecondWrapPanel.Children.Insert(0, sender.Clone());
+            AddLastFileToSecondWrapPanel(sender);
+            ConfigWorker.AddLastFiles(sender.FilePath);
         }
+
+        private void AddLastFileToSecondWrapPanel(ItemCard itemCard)
+        {
+            if (SecondWrapPanel.Children.Count == ConfigWorker.MaxCountLastFiles)
+                SecondWrapPanel.Children.RemoveAt(ConfigWorker.MaxCountLastFiles - 1);
+
+            SecondWrapPanel.Children.Insert(0, itemCard.Clone());
+        }
+
     }
 }

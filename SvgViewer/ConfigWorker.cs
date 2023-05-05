@@ -13,15 +13,39 @@ namespace SvgViewer
         private readonly string _configFilePath;
         private Settings Settings;
 
+        public List<string> LastDirectories { get => Settings.LastDirectories; }
+        public int MaxCountLastFiles
+        {
+            get => Settings.MaxCountLastFiles; 
+            set
+            {
+                Settings.MaxCountLastFiles = value;
+                Save();
+            }
+        }
+        public List<string> LastFiles { get => Settings.LastFiles; }
+
+        private string ConfigDirectoryPath
+        {
+            get
+            {
+                var path = Path.Combine(_documentsPath, "SvgViewer");
+
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                return path;
+            }
+        }
+
         public ConfigWorker()
         {
-            _configFilePath = Path.Combine(_documentsPath, "SvgViewer", "config.json");
-
+            _configFilePath = Path.Combine(ConfigDirectoryPath, "config.json");
 
             if (!ConfigExists())
                 CreateConfig();
 
-            Settings = new Settings().Deserialize(_configFilePath);
+            Settings = Load();
         }
 
         private bool ConfigExists()
@@ -29,22 +53,48 @@ namespace SvgViewer
             return File.Exists(_configFilePath);
         }
 
-        private Settings CreateConfig(Settings settings)
+        private Settings CreateConfig()
         {
-            var setting = settings.Deserialize(_configFilePath);
-            return setting;
+            Settings = new Settings();
+            Save();
+            return Load();
         }
 
+        public void AddLastDirectory(string path)
+        {
+            Settings.LastDirectories.Add(path);
+            Save();
+        }
+
+        public void AddLastFiles(string path)
+        {
+            if (Settings.LastFiles.Count == MaxCountLastFiles)
+                Settings.LastFiles.RemoveAt(MaxCountLastFiles - 1);
+
+            Settings.LastFiles.Add(path);
+            Save();
+        }
+
+        public List<string> GetLastDirectoris()
+        {
+            return Settings.LastDirectories;
+        }
+
+        #region Save/Load
         public void Save()
         {
-
+            var json = Settings.Serialize();
+            File.WriteAllText(_configFilePath, json);
         }
 
-        public void Load()
+        public Settings Load()
         {
-
+            var text = File.ReadAllText(_configFilePath);
+            var settings = new Settings();
+            settings.Deserialize(text);
+            return settings;
         }
-
+        #endregion  
     }
 }
 

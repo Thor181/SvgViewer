@@ -27,7 +27,7 @@
 
         <Popup x:Name="LastDirsPopup" IsOpen="{Binding ElementName=DirectoryPathTextbox, Path=IsFocused, Mode=OneWay}" 
                StaysOpen="True" PlacementTarget="{Binding ElementName=DirectoryPathTextbox}" Placement="Bottom">
-            <ListBox x:Name="LastDirectoriesListbox" ItemsSource="{Binding ElementName=MainWindowX, Path=LastDirectories}"/>
+            <ListBox x:Name="LastDirectoriesListbox" ItemsSource="{Binding ElementName=MainWindowX, Path=ConfigWorker.LastDirectories}"/>
         </Popup>
 
         <DockPanel Grid.Row="0" Grid.Column="1">
@@ -55,7 +55,7 @@
                 </Grid.RowDefinitions>
                 
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Text="Last files"></TextBlock>
-                <WrapPanel x:Name="SecondWrapPanel" VerticalAlignment="Stretch" Grid.Row="1"  />
+                <WrapPanel x:Name="SecondWrapPanel" VerticalAlignment="Stretch" Grid.Row="1" />
             </Grid>
         </ScrollViewer>
     </Grid>

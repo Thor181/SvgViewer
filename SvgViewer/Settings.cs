@@ -9,9 +9,9 @@ namespace SvgViewer
 {
     public class Settings
     {
-        public List<string> LastDirectories { get; set; }
-        public List<string> LastFiles { get; set; }
-        public int MaxCountLastFiles { get; set; }
+        public List<string> LastDirectories { get; set; } = new List<string>();
+        public List<string> LastFiles { get; set; } = new List<string>();
+        public int MaxCountLastFiles { get; set; } = 20;
 
         public string Serialize()
         {
