@@ -10,14 +10,7 @@ namespace SvgViewer
 {
     public class DirectoriesWorker
     {
-        private static string PathsFile
-        {
-            get
-            {
-                return $"{Path.GetTempPath()}\\SvgViewerLastDirectories.txt";
-            }
-        }
-
+        private static string PathsFile => $"{Path.GetTempPath()}\\SvgViewerLastDirectories.txt";
 
         public static void WriteToFile(string path)
         {
@@ -56,7 +49,7 @@ namespace SvgViewer
 
         private static bool IsPath(string path)
         {
-            return path.Contains("\\");
+            return path.Contains('\\');
         }
     }
 }

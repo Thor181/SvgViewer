@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SvgViewer
+namespace SvgViewer.Config
 {
     public class ConfigWorker
     {
@@ -13,10 +13,10 @@ namespace SvgViewer
         private readonly string _configFilePath;
         private Settings Settings;
 
-        public List<string> LastDirectories { get => Settings.LastDirectories; }
+        public List<string> LastDirectories => Settings.LastDirectories;
         public int MaxCountLastFiles
         {
-            get => Settings.MaxCountLastFiles; 
+            get => Settings.MaxCountLastFiles;
             set
             {
                 Settings.MaxCountLastFiles = value;

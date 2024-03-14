@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SvgViewer.Editor;
+using SvgViewer.Messenger;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -19,7 +21,6 @@ namespace SvgViewer
         private ItemCard()
         {
             InitializeComponent();
-            CopyHandler copyHandler = delegate (ItemCard sender) { };
         }
 
         public ItemCard(string imagePath) : this()
@@ -29,26 +30,35 @@ namespace SvgViewer
             FileName = Path.GetFileName(imagePath);
             SvgPlace.Source = new Uri(imagePath);
             NameTextblock.Text = Path.GetFileName(imagePath);
-            MainGrid.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs e)
-            {
-                Clipboard.SetText(NonVisibleLabel.Content.ToString() ?? "");
-                Task.Run(() =>
-                {
-                    Dispatcher.Invoke(async () =>
-                    {
-                        Copied?.Invoke(this);
-
-                        IsCopiedPopup.IsOpen = true;
-                        await Task.Delay(1500);
-                        IsCopiedPopup.IsOpen = false;
-                    });
-                });
-            };
         }
 
         public ItemCard Clone()
         {
             return new ItemCard(FilePath);
+        }
+
+        private void ItemCardUserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Clipboard.SetText(NonVisibleLabel.Content.ToString() ?? "");
+            Task.Run(() =>
+            {
+                Dispatcher.Invoke(async () =>
+                {
+                    Copied?.Invoke(this);
+
+                    IsCopiedPopup.IsOpen = true;
+                    await Task.Delay(1500);
+                    IsCopiedPopup.IsOpen = false;
+                });
+            });
+        }
+
+        private void ItemCardUserControl_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var id = Guid.NewGuid();
+
+            Messenger<string>.Default.PosteRestante(FilePath, nameof(EditorViewModel));
+            new EditorWindow(id).Show();
         }
     }
 }

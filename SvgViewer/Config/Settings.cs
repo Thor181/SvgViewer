@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace SvgViewer
+namespace SvgViewer.Config
 {
     public class Settings
     {
