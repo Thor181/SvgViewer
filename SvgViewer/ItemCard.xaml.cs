@@ -55,10 +55,8 @@ namespace SvgViewer
 
         private void ItemCardUserControl_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var id = Guid.NewGuid();
-
             Messenger<string>.Default.PosteRestante(FilePath, nameof(EditorViewModel));
-            new EditorWindow(id).Show();
+            new EditorWindow().Show();
         }
     }
 }

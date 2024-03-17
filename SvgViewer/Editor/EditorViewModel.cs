@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
+using SharpVectors.Converters;
+using SvgViewer.Command;
 using SvgViewer.Messenger;
 
 namespace SvgViewer.Editor
@@ -29,11 +32,11 @@ namespace SvgViewer.Editor
         private void HandleMessenger()
         {
             var response = Messenger<string>.Default.Claim(nameof(EditorViewModel));
-
+            
             if (!response.Empty)
             {
                 var raw = response.MailList.SingleOrDefault();
-
+                 
                 var text = File.ReadAllText(raw).Split('>').Select(x => x + '>');
 
                 var flowDocument = new FlowDocument();

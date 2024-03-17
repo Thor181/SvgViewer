@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <RichTextBox HorizontalAlignment="Stretch"
+            <RichTextBox x:Name="CodeTextBox" HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch">
             </RichTextBox>
         </Grid>

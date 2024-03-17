@@ -16,16 +16,8 @@ namespace SvgViewer.Editor
 {
     public partial class EditorWindow : Window
     {
-        public Guid Identifier { get; init; }
-
-        private EditorWindow()
+        public EditorWindow()
         {
-            InitializeComponent();
-        }
-
-        public EditorWindow(Guid identifier) : this()
-        {
-            Identifier = identifier;
         }
     }
 }
