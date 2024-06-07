@@ -75,46 +75,32 @@ namespace SvgViewer
             if (!rootPath.Contains(":\\"))
                 return;
 
-            System.Collections.Concurrent.ConcurrentBag<ItemCard> cards = new();
+            string[] filePaths = Directory.GetFiles(rootPath, "*.svg", new EnumerationOptions()
+            {
+                MatchCasing = MatchCasing.CaseInsensitive,
+                IgnoreInaccessible = true,
+                RecurseSubdirectories = InnerDirectoriesCheckbox.IsChecked == true
+            }).ToArray();
 
             try
             {
-                string[] filePaths = Directory.GetFiles(rootPath).Where(x => x.Contains(".svg")).ToArray();
                 await Task.Run(async () =>
                 {
-                    Parallel.ForEach(filePaths, x =>
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            var card = new ItemCard(x);
-                            card.Copied += Card_Copied;
-                            cards.Add(card);
-                        });
-                    });
-
-                    foreach (var item in cards)
+                    foreach (var path in filePaths)
                     {
                         await Dispatcher.InvokeAsync(() =>
                         {
-                            MainWrapPanel.Children.Add(item);
+                            var card = new ItemCard(path);
+                            card.Copied += Card_Copied;
+                            MainWrapPanel.Children.Add(card);
                             CountTextblock.Text = MainWrapPanel.Children.Count.ToString();
                         });
                     }
                 });
-
-                if (InnerDirectoriesCheckbox.IsChecked == true)
-                {
-                    var subfolders = Directory.GetDirectories(rootPath);
-                    foreach (var subfolder in subfolders)
-                        await CollectFiles(subfolder);
-                }
             }
-            catch (DirectoryNotFoundException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-            catch (UnauthorizedAccessException)
-            {
             }
         }
 
