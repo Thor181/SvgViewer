@@ -94,7 +94,7 @@ namespace SvgViewer
                             card.Copied += Card_Copied;
                             MainWrapPanel.Children.Add(card);
                             CountTextblock.Text = MainWrapPanel.Children.Count.ToString();
-                        });
+                        }, System.Windows.Threading.DispatcherPriority.Input);
                     }
                 });
             }
