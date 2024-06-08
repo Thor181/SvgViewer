@@ -6,8 +6,12 @@
         xmlns:local="clr-namespace:SvgViewer"
         mc:Ignorable="d"
         x:Name="MainWindowX"
-        Title="SvgViewer" Height="450" Width="800">
-    <Grid>
+        Title="SvgViewer"
+        Height="450"
+        Width="800"
+        PreviewMouseWheel="Grid_PreviewMouseWheel"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid  >
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
@@ -43,7 +47,8 @@
             <TextBlock x:Name="CountTextblock" Margin="0 0 5 0"  Text="0" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" Margin="5" Grid.ColumnSpan="2">
+        <ScrollViewer x:Name="MainScrollViewer"
+                      Grid.Row="1" Margin="5" Grid.ColumnSpan="2">
             <WrapPanel x:Name="MainWrapPanel"  />
         </ScrollViewer>
         

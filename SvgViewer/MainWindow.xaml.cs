@@ -1,18 +1,28 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace SvgViewer
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public ConfigWorker ConfigWorker { get; set; }
+
+        private bool _isLoading = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainWindow()
         {
@@ -86,6 +96,8 @@ namespace SvgViewer
             {
                 await Task.Run(async () =>
                 {
+                    _isLoading = true;
+
                     foreach (var path in filePaths)
                     {
                         await Dispatcher.InvokeAsync(() =>
@@ -96,6 +108,9 @@ namespace SvgViewer
                             CountTextblock.Text = MainWrapPanel.Children.Count.ToString();
                         }, System.Windows.Threading.DispatcherPriority.Input);
                     }
+
+                    _isLoading = false;
+
                 });
             }
             catch (Exception ex)
@@ -118,5 +133,33 @@ namespace SvgViewer
             SecondWrapPanel.Children.Insert(0, itemCard.Clone());
         }
 
+        private void Grid_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            if (_isLoading)
+                return;
+
+            const int minSize = 80;
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    foreach (ItemCard item in MainWrapPanel.Children)
+                    {
+                        var newWidth = 10 * (e.Delta / Math.Abs(e.Delta));
+                        var newHeight = 10 * (e.Delta / Math.Abs(e.Delta));
+                        item.Width += newWidth;
+                        item.Height += newHeight;
+
+                        if (item.Width < minSize)
+                            item.Width = minSize;
+
+                        if (item.Height < minSize)
+                            item.Height = minSize;
+                    }
+                }, System.Windows.Threading.DispatcherPriority.Send);
+
+            }
+        }
     }
 }
