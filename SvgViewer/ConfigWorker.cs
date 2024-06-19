@@ -23,7 +23,9 @@ namespace SvgViewer
                 Save();
             }
         }
+
         public List<string> LastFiles { get => Settings.LastFiles; }
+        public List<string> FavoriteFiles { get => Settings.FavoriteFiles; }
 
         private string ConfigDirectoryPath
         {
@@ -37,6 +39,8 @@ namespace SvgViewer
                 return path;
             }
         }
+
+
 
         public ConfigWorker()
         {

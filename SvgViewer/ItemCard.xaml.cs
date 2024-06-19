@@ -12,23 +12,31 @@ namespace SvgViewer
     {
         public string FilePath { get; private set; }
         public string FileName { get; private set; }
+        public bool IsFavorite { get; private set; }
 
         public delegate void CopyHandler(ItemCard sender);
         public event CopyHandler Copied;
+        public event CopyHandler FavoriteClicked;
 
         private ItemCard()
         {
             InitializeComponent();
-            CopyHandler copyHandler = delegate (ItemCard sender) { };
         }
 
-        public ItemCard(string imagePath) : this()
+        public ItemCard(string imagePath, bool isFavorite) : this()
         {
             NonVisibleLabel.Content = imagePath;
             FilePath = imagePath;
             FileName = Path.GetFileName(imagePath);
             SvgPlace.Source = new Uri(imagePath);
             NameTextblock.Text = Path.GetFileName(imagePath);
+            IsFavorite = isFavorite;
+
+            isFavorite = false;
+            
+            FavoriteButton.Visibility = isFavorite ? Visibility.Visible : Visibility.Collapsed;
+            FavoriteOutImage.Visibility = isFavorite ? Visibility.Collapsed : Visibility.Visible;
+
             MainGrid.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs e)
             {
                 Clipboard.SetText(NonVisibleLabel.Content.ToString() ?? "");
@@ -44,11 +52,16 @@ namespace SvgViewer
                     });
                 });
             };
+
+            FavoriteButton.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs e)
+            {
+                FavoriteClicked?.Invoke(this);
+            };
         }
 
         public ItemCard Clone()
         {
-            return new ItemCard(FilePath);
+            return new ItemCard(FilePath, IsFavorite);
         }
     }
 }

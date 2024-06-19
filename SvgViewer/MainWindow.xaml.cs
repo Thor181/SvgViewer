@@ -38,7 +38,7 @@ namespace SvgViewer
             foreach (var file in lastFiles)
             {
                 if (File.Exists(file))
-                    AddLastFileToSecondWrapPanel(new ItemCard(file));
+                    AddLastFileToSecondWrapPanel(new ItemCard(file, false));
             }
         }
 
@@ -102,8 +102,9 @@ namespace SvgViewer
                     {
                         await Dispatcher.InvokeAsync(() =>
                         {
-                            var card = new ItemCard(path);
+                            var card = new ItemCard(path, false);
                             card.Copied += Card_Copied;
+                            card.FavoriteClicked += Card_FavoriteClicked;
                             MainWrapPanel.Children.Add(card);
                             CountTextblock.Text = MainWrapPanel.Children.Count.ToString();
                         }, System.Windows.Threading.DispatcherPriority.Input);
@@ -117,6 +118,11 @@ namespace SvgViewer
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void Card_FavoriteClicked(ItemCard sender)
+        {
+            FavoriteWrapPanel.Children.Add(sender);
         }
 
         private void Card_Copied(ItemCard sender)

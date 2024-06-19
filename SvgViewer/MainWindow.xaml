@@ -11,9 +11,10 @@
         Width="800"
         PreviewMouseWheel="Grid_PreviewMouseWheel"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Grid  >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -22,45 +23,96 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Row="0" Grid.Column="0" Margin="2" >
-            <TextBlock Text="Directory" VerticalAlignment="Center"/>
-            <TextBox x:Name="DirectoryPathTextbox" d:Text="d:/path/to/file.svg" 
-                     HorizontalAlignment="Stretch" Margin="3" TextChanged="DirectoryPathTextbox_TextChanged">
+        <DockPanel Grid.Row="0"
+                   Grid.Column="0"
+                   Margin="2">
+            <TextBlock Text="Directory"
+                       VerticalAlignment="Center" />
+            <TextBox x:Name="DirectoryPathTextbox"
+                     d:Text="d:/path/to/file.svg"
+                     HorizontalAlignment="Stretch"
+                     Margin="3"
+                     TextChanged="DirectoryPathTextbox_TextChanged">
             </TextBox>
         </DockPanel>
 
-        <Popup x:Name="LastDirsPopup" IsOpen="{Binding ElementName=DirectoryPathTextbox, Path=IsFocused, Mode=OneWay}" 
-               StaysOpen="True" PlacementTarget="{Binding ElementName=DirectoryPathTextbox}" Placement="Bottom">
-            <ListBox x:Name="LastDirectoriesListbox" ItemsSource="{Binding ElementName=MainWindowX, Path=ConfigWorker.LastDirectories}"/>
+        <Popup x:Name="LastDirsPopup"
+               IsOpen="{Binding ElementName=DirectoryPathTextbox, Path=IsFocused, Mode=OneWay}"
+               StaysOpen="True"
+               PlacementTarget="{Binding ElementName=DirectoryPathTextbox}"
+               Placement="Bottom">
+            <ListBox x:Name="LastDirectoriesListbox"
+                     ItemsSource="{Binding ElementName=MainWindowX, Path=ConfigWorker.LastDirectories}" />
         </Popup>
 
-        <DockPanel Grid.Row="0" Grid.Column="1">
-            <TextBlock Text="Search" VerticalAlignment="Center"/>
-            <TextBox x:Name="SearchTextbox" Margin="3" VerticalContentAlignment="Center"/>
+        <DockPanel Grid.Row="0"
+                   Grid.Column="1">
+            <TextBlock Text="Search"
+                       VerticalAlignment="Center" />
+            <TextBox x:Name="SearchTextbox"
+                     Margin="3"
+                     VerticalContentAlignment="Center" />
         </DockPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="2" >
-            <CheckBox x:Name="InnerDirectoriesCheckbox" IsChecked="True" 
-                  Content="Subfolders" HorizontalAlignment="Left"
-                  VerticalAlignment="Center" Width="110"/>
-            <TextBlock VerticalAlignment="Center">Count: </TextBlock>
-            <TextBlock x:Name="CountTextblock" Margin="0 0 5 0"  Text="0" VerticalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2">
+            <CheckBox x:Name="InnerDirectoriesCheckbox"
+                      IsChecked="True"
+                      Content="Subfolders"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Center"
+                      Width="110" />
+            <TextBlock VerticalAlignment="Center">Count:</TextBlock>
+            <TextBlock x:Name="CountTextblock"
+                       Margin="0 0 5 0"
+                       Text="0"
+                       VerticalAlignment="Center" />
         </StackPanel>
 
         <ScrollViewer x:Name="MainScrollViewer"
-                      Grid.Row="1" Margin="5" Grid.ColumnSpan="2">
-            <WrapPanel x:Name="MainWrapPanel"  />
+                      d:Background="LightCoral"
+                      Grid.Row="1"
+                      Grid.RowSpan="2"
+                      Margin="5"
+                      Grid.ColumnSpan="2">
+            <WrapPanel x:Name="MainWrapPanel" />
         </ScrollViewer>
-        
-        <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="5">
+
+        <ScrollViewer Grid.Row="1"
+                      Grid.Column="2"
+                      Margin="5"
+                      d:Background="LightCyan">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20" />
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Text="Last files"></TextBlock>
-                <WrapPanel x:Name="SecondWrapPanel" VerticalAlignment="Stretch" Grid.Row="1" />
+
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Text="Last files"></TextBlock>
+                <WrapPanel x:Name="SecondWrapPanel"
+                           VerticalAlignment="Stretch"
+                           Grid.Row="1" />
+            </Grid>
+        </ScrollViewer>
+        
+        <ScrollViewer Grid.Row="2"
+                      Grid.Column="2"
+                      Margin="5"
+                      d:Background="LightCyan">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Text="Favorite files"></TextBlock>
+                <WrapPanel x:Name="FavoriteWrapPanel"
+                           VerticalAlignment="Stretch"
+                           Grid.Row="1" />
             </Grid>
         </ScrollViewer>
     </Grid>
