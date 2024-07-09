@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using SvgViewer.V2.ViewModels;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,9 +12,6 @@ using System.Windows.Shapes;
 
 namespace SvgViewer.V2
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
