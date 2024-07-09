@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,17 +20,51 @@ namespace SvgViewer.V2.ViewModels
         public ObservableCollection<Card> Cards { get; set; } 
 
         public ICommand ClickCommand { get; set; }
+        public ICommand DirectoryInputCommand { get; set; }
+
+        public bool Subfolders { get; set; } = true;
 
         public MainViewModel()
         {
-            Cards = [new Card("G:\\SvgSize\\1 (1).svg", "1 (1).svg"), new Card("G:\\SvgSize\\1 (1).svg", "1 (1).svg")];
+            Cards = [];
 
             ClickCommand = new RelayCommand<Card>(HandleClick);
+            DirectoryInputCommand = new RelayCommand<string>(HandleDirectoryInput);
         }
 
-        public void HandleClick(Card? card)
+        private void HandleClick(Card? card)
         {
             HandyControl.Controls.Growl.Success(SuccessGrowlInfo.Instance);
+        }
+
+        private void HandleDirectoryInput(string? parameter)
+        {
+            if (string.IsNullOrEmpty(parameter))
+                return;
+
+            if (!parameter.Contains(":\\"))
+                return;
+
+            string[] filePaths = Directory.GetFiles(parameter, "*.svg", new EnumerationOptions()
+            {
+                MatchCasing = MatchCasing.CaseInsensitive,
+                IgnoreInaccessible = true,
+                RecurseSubdirectories = Subfolders
+            });
+
+
+
+            foreach (string filePath in filePaths)
+            {
+
+                App.Current.Dispatcher.Invoke(() => {
+
+                    Cards.Add(new Card(filePath, Path.GetFileName(filePath)));
+
+                });
+
+            }
+
         }
 
 

@@ -41,16 +41,23 @@
                 <hc:TextBox d:Text="path/here/to/image/directory"
                             hc:InfoElement.Placeholder="Directory"
                             VerticalContentAlignment="Center"
-                            Height="25"/>
+                            Height="25">
+                    <hc:TextBox.InputBindings>
+                        <KeyBinding Key="Enter"
+                                    Command="{Binding DirectoryInputCommand}"
+                                    CommandParameter="{Binding Path=Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TextBox}}}"></KeyBinding>
+                    </hc:TextBox.InputBindings>
+                </hc:TextBox>
             </StackPanel>
 
             <StackPanel Grid.Column="1"
                         Margin="5">
-                <!--<TextBlock Text="Search"></TextBlock>-->
+
                 <hc:TextBox Grid.Column="1"
                             hc:InfoElement.Placeholder="Search"
                             VerticalContentAlignment="Center"
-                            Height="25"></hc:TextBox>
+                            Height="25">
+                </hc:TextBox>
             </StackPanel>
 
             <StackPanel Grid.Column="4"
@@ -58,7 +65,7 @@
                         HorizontalAlignment="Right"
                         Orientation="Horizontal"
                         Margin="0 0 5 0">
-                <CheckBox VerticalAlignment="Center">
+                <CheckBox VerticalAlignment="Center" IsChecked="{Binding Subfolders}">
                     <CheckBox.RenderTransform>
                         <ScaleTransform ScaleX="1.5"
                                         ScaleY="1.5"
@@ -73,7 +80,7 @@
         </Grid>
 
         <!--CONTENT-->
-        <Grid Grid.Row="1" >
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"></ColumnDefinition>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
