@@ -18,5 +18,28 @@ namespace SvgViewer.V2
         {
             InitializeComponent();
         }
+
+        private void MainWindowX_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F3 || (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.F)))
+            {
+                SearchTextBox.Focus();
+            }
+        }
+
+        private void MainWindowX_Deactivated(object sender, EventArgs e)
+        {
+            
+            //MainScrollViewer.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = sender as ListBox;
+            
+            DirectoryInput.Text = box.SelectedValue as string;
+
+            DirectoryInput.Focus();
+        }
     }
 }

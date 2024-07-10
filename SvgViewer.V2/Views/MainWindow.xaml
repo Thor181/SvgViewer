@@ -8,15 +8,22 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:views="clr-namespace:SvgViewer.V2.Views"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:svc="clr-namespace:SvgViewer.V2.Services"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
-        Width="800"
-        x:Name="MainWindowX">
+        Width="830"
+        x:Name="MainWindowX"
+        KeyDown="MainWindowX_KeyDown"
+        Deactivated="MainWindowX_Deactivated">
 
     <Window.DataContext>
         <vm:MainViewModel></vm:MainViewModel>
     </Window.DataContext>
+
+    <Window.Resources>
+        <svc:VersionService x:Key="VersionService" />
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -27,7 +34,7 @@
 
         <!--HEADER-->
         <Grid Grid.Row="0"
-              d:Background="LightCoral">
+              Background="LightCoral">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -35,25 +42,28 @@
                 <ColumnDefinition Width="0.6*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-
             <StackPanel Grid.Column="0"
                         Margin="5">
-                <hc:TextBox d:Text="path/here/to/image/directory"
+
+                <hc:TextBox x:Name="DirectoryInput"
+                            d:Text="path/here/to/image/directory"
                             hc:InfoElement.Placeholder="Directory"
                             VerticalContentAlignment="Center"
                             Height="25">
                     <hc:TextBox.InputBindings>
                         <KeyBinding Key="Enter"
                                     Command="{Binding DirectoryInputCommand}"
-                                    CommandParameter="{Binding Path=Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TextBox}}}"></KeyBinding>
+                                    CommandParameter="{Binding Path=Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type hc:TextBox}}}"></KeyBinding>
                     </hc:TextBox.InputBindings>
+
                 </hc:TextBox>
             </StackPanel>
 
             <StackPanel Grid.Column="1"
                         Margin="5">
 
-                <hc:TextBox Grid.Column="1"
+                <hc:TextBox x:Name="SearchTextBox"
+                            Grid.Column="1"
                             hc:InfoElement.Placeholder="Search"
                             VerticalContentAlignment="Center"
                             Height="25">
@@ -65,65 +75,155 @@
                         HorizontalAlignment="Right"
                         Orientation="Horizontal"
                         Margin="0 0 5 0">
-                <CheckBox VerticalAlignment="Center" IsChecked="{Binding Subfolders}">
+                <CheckBox VerticalAlignment="Center"
+                          IsChecked="{Binding Subfolders}">
                     <CheckBox.RenderTransform>
                         <ScaleTransform ScaleX="1.5"
                                         ScaleY="1.5"
-                                        CenterY="8"></ScaleTransform>
+                                        CenterY="8" />
                     </CheckBox.RenderTransform>
                 </CheckBox>
 
                 <TextBlock Margin="15 0 0 0"
                            Text="Subfolders"
-                           VerticalAlignment="Center"></TextBlock>
+                           VerticalAlignment="Center" />
             </StackPanel>
         </Grid>
 
         <!--CONTENT-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
 
-                <ItemsControl ItemsSource="{Binding Cards}"
-                              Margin="5">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <views:CardView Card="{Binding}"
-                                            Margin="5"
-                                            ClickCommand="{Binding Path=DataContext.ClickCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
-                                            ClickCommandParameter="{Binding}"
-                                            Cursor="Hand">
-                            </views:CardView>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                <Border x:Name="MainBorder"
+                        CornerRadius="8"
+                        Background="#FFEFEFEF"
+                        Margin="5"
+                        BorderThickness="1"
+                        BorderBrush="LightCoral"
+                        Padding="0 5 0 0">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="18"
+                                          Opacity="0.4" />
+                    </Border.Effect>
+
+
+                    <ItemsControl ItemsSource="{Binding Cards}"
+                                  Margin="5">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <views:CardView Card="{Binding}"
+                                                Margin="5"
+                                                ClickCommand="{Binding Path=DataContext.ClickCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                                                ClickCommandParameter="{Binding}"
+                                                Cursor="Hand">
+                                </views:CardView>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer x:Name="MainScrollViewer">
+                                    <VirtualizingStackPanel>
+                                        <ItemsPresenter />
+                                    </VirtualizingStackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                    </ItemsControl>
+
+                </Border>
             </Grid>
 
-            <Grid Grid.Column="1"
-                  d:Background="AliceBlue">
-            </Grid>
+            <Grid Grid.Column="1">
+                <Border CornerRadius="8"
+                        Background="#FFEFEFEF"
+                        Margin="5"
+                        BorderThickness="1"
+                        BorderBrush="LightCoral">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="18"
+                                          Opacity="0.4" />
+                    </Border.Effect>
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding LastFilesCards}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <views:CardView Card="{Binding}"
+                                                    Margin="5"
+                                                    ClickCommand="{Binding Path=DataContext.ClickCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                                                    ClickCommandParameter="{Binding}"
+                                                    Cursor="Hand">
+                                    </views:CardView>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
 
+            </Grid>
         </Grid>
 
         <!--FOOTER-->
         <Grid Grid.Row="2"
-              d:Background="LightYellow">
-            <TextBlock HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                       Margin="5">
-                <Run Text="Count: "></Run>
-                <Run Text="{Binding Cards.Count, Mode=OneWay}"></Run>
-            </TextBlock>
+              Background="LightCoral">
+
+            <hc:Shield Subject="v."
+                       Status="{Binding Version}"
+                       Color="#FF326CF3"
+                       Margin="5 0 0 0" />
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+
+                <hc:WaveProgressBar Value="{Binding Progress}"
+                                    Minimum="0"
+                                    Maximum="100"
+                                    WaveThickness="1"
+                                    Width="15"
+                                    Height="15" />
+
+                <TextBlock VerticalAlignment="Center"
+                           Margin="5">
+                    <Run Text="Count: "></Run>
+                    <Run Text="{Binding Cards.Count, Mode=OneWay}"></Run>
+                </TextBlock>
+            </StackPanel>
+
+
         </Grid>
+
+        <hc:CircleProgressBar Visibility="{Binding IsLoading, Converter={StaticResource Boolean2VisibilityConverter}}"
+                              Grid.RowSpan="10"
+                              IsIndeterminate="True"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              Width="70"
+                              Height="30"
+                              ArcThickness="7" />
+
+        <Popup IsOpen="{Binding ElementName=DirectoryInput, Path=IsFocused, Mode=OneWay}"
+               StaysOpen="True"
+               PlacementTarget="{Binding ElementName=DirectoryInput}"
+               Placement="Bottom"
+               AllowsTransparency="True">
+            <ListBox ItemsSource="{Binding LastDirectories}"
+                     Style="{StaticResource ListBox.Small}"
+                     SelectionChanged="ListBox_SelectionChanged" />
+        </Popup>
 
     </Grid>
 </Window>
