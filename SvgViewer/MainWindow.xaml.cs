@@ -104,7 +104,7 @@ namespace SvgViewer
                         {
                             var card = new ItemCard(path, false);
                             card.Copied += Card_Copied;
-                            card.FavoriteClicked += Card_FavoriteClicked;
+                            //card.FavoriteClicked += Card_FavoriteClicked;
                             MainWrapPanel.Children.Add(card);
                             CountTextblock.Text = MainWrapPanel.Children.Count.ToString();
                         }, System.Windows.Threading.DispatcherPriority.Input);
