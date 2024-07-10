@@ -12,8 +12,10 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="20"></RowDefinition>
         </Grid.RowDefinitions>
-        
-        <svg:SvgViewbox Grid.Row="0" Source="{Binding FilePath}"></svg:SvgViewbox>
+        <Image Grid.Row="0"
+               Source="{Binding Thumbnail}"
+               d:Source="/Template.png"></Image>
+        <!--<svg:SvgViewbox Grid.Row="0" Source="{Binding FilePath}"></svg:SvgViewbox>-->
         <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Center" TextTrimming="WordEllipsis" d:Text="Name_of_picture_something_else"></TextBlock>
     </Grid>
 </UserControl>
