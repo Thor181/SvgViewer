@@ -82,26 +82,6 @@ namespace SvgViewer.V2.ViewModels
             SearchInputCommand = new RelayCommand<string>(HandleSearchInput);
         }
 
-        private void HandleSearchInput(string? searchText)
-        {
-            if (string.IsNullOrEmpty(searchText))
-            {
-                foreach (var item in Cards)
-                {
-                    item.IsVisible = true;
-                }
-
-                return;
-            }
-
-            searchText = searchText.ToLower();
-
-            foreach (var item in Cards)
-            {
-                item.IsVisible = item.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase);
-            }
-        }
-
         private void InitializeLastFiles()
         {
             var lastFiles = _lastFilesService.Load();
@@ -180,6 +160,26 @@ namespace SvgViewer.V2.ViewModels
             }
 
             _lastDirectoriesService.Save(parameter, LastDirectories.Length == 10);
+        }
+
+        private void HandleSearchInput(string? searchText)
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                foreach (var item in Cards)
+                {
+                    item.IsVisible = true;
+                }
+
+                return;
+            }
+
+            searchText = searchText.ToLower();
+
+            foreach (var item in Cards)
+            {
+                item.IsVisible = item.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase);
+            }
         }
 
         private VisualCard CreateCard(string filePath)
