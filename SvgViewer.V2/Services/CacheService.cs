@@ -35,6 +35,9 @@ namespace SvgViewer.V2.Services
 
             var hashString = GetHashString(name);
 
+            if (string.IsNullOrEmpty(hashString))
+                return;
+
             if (_cacheMap.ContainsKey(hashString))
                 _cacheMap[hashString] = newName;
             else
@@ -48,6 +51,9 @@ namespace SvgViewer.V2.Services
         public byte[]? LoadFromCache(string name)
         {
             var hashString = GetHashString(name);
+
+            if (string.IsNullOrEmpty(hashString))
+                return null;
 
             if (_cacheMap.TryGetValue(hashString, out string? value))
                 return File.ReadAllBytes(Path.Combine(_dataDirectoryPath, value));
@@ -64,6 +70,9 @@ namespace SvgViewer.V2.Services
 
         private string GetHashString(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return string.Empty;
+
             var hash = MD5.HashData(Encoding.UTF8.GetBytes(name));
             var hashString = BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
 
