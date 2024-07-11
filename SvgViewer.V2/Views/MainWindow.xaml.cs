@@ -29,17 +29,19 @@ namespace SvgViewer.V2
 
         private void MainWindowX_Deactivated(object sender, EventArgs e)
         {
-            
-            //MainScrollViewer.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+            ContentGrid.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var box = sender as ListBox;
-            
+
             DirectoryInput.Text = box.SelectedValue as string;
 
             DirectoryInput.Focus();
+            
+            LastDirectoriesPopup.IsOpen = false;
+            
         }
     }
 }
