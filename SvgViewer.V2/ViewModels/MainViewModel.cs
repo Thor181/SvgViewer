@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SvgViewer.V2.ViewModels
 {
@@ -32,6 +33,7 @@ namespace SvgViewer.V2.ViewModels
         private readonly ClipboardService _clipboardService;
         private readonly LastEntityService _lastDirectoriesService;
         private readonly LastEntityService _lastFilesService;
+        private readonly LastEntityService _favoriteFilesService;
         private readonly ImageConverterService _imageConverterService;
         private readonly CacheService _cacheService;
 
@@ -40,12 +42,16 @@ namespace SvgViewer.V2.ViewModels
         private ObservableLinkedList<VisualCard> _lastFilesCards = new();
         public ObservableLinkedList<VisualCard> LastFilesCards { get => _lastFilesCards; set => SetProperty(ref _lastFilesCards, value); }
 
+        private ObservableLinkedList<VisualCard> _favoriteCards = new();
+        public ObservableLinkedList<VisualCard> FavoriteCards { get => _favoriteCards; set => SetProperty(ref _favoriteCards, value); }
+
         private string[] _lastDirectories = [];
         public string[] LastDirectories { get => _lastDirectoriesService.Load(); set => SetProperty(ref _lastDirectories, value); }
 
         public ICommand ClickCommand { get; set; }
         public ICommand DirectoryInputCommand { get; set; }
         public ICommand SearchInputCommand { get; set; }
+        public ICommand FavoriteClickCommand { get; set; }
 
         public string Version { get => _versionService.Version ?? string.Empty; }
 
@@ -67,8 +73,9 @@ namespace SvgViewer.V2.ViewModels
             _clipboardService = App.ServiceProvider.GetRequiredService<ClipboardService>();
             _lastDirectoriesService = App.ServiceProvider.GetRequiredKeyedService<LastEntityService>(LastEntityServiceKeys.Directory);
             _lastFilesService = App.ServiceProvider.GetRequiredKeyedService<LastEntityService>(LastEntityServiceKeys.File);
-            _imageConverterService = App.ServiceProvider.GetRequiredService<ImageConverterService>();
+            _favoriteFilesService = App.ServiceProvider.GetRequiredKeyedService<LastEntityService>(LastEntityServiceKeys.Favorite);
             _cacheService = App.ServiceProvider.GetRequiredService<CacheService>();
+            _imageConverterService = App.ServiceProvider.GetRequiredService<ImageConverterService>();
 
             var configuration = App.ServiceProvider.GetRequiredService<IConfiguration>();
 
@@ -76,10 +83,12 @@ namespace SvgViewer.V2.ViewModels
             _maxCountLastFiles = Convert.ToInt32(configuration.GetRequiredSection("MaxCountLastFiles").Value);
 
             InitializeLastFiles();
+            InitializeFavoritesCards();
 
             ClickCommand = new RelayCommand<VisualCard>(HandleCardClick);
             DirectoryInputCommand = new RelayCommand<string>(HandleDirectoryInput);
             SearchInputCommand = new RelayCommand<string>(HandleSearchInput);
+            FavoriteClickCommand = new RelayCommand<VisualCard>(HandleFavoriteClick);
         }
 
         private void InitializeLastFiles()
@@ -92,6 +101,18 @@ namespace SvgViewer.V2.ViewModels
                 card.IsLastFile = true;
 
                 LastFilesCards.AddFirst(card);
+            }
+        }
+
+        private void InitializeFavoritesCards()
+        {
+            var favorites = _favoriteFilesService.Load();
+
+            foreach (var item in favorites)
+            {
+                var card = CreateCard(item);
+
+                FavoriteCards.AddLast(card);
             }
         }
 
@@ -180,6 +201,15 @@ namespace SvgViewer.V2.ViewModels
             {
                 item.IsVisible = item.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase);
             }
+        }
+
+        private void HandleFavoriteClick(VisualCard? visualCard)
+        {
+            if (visualCard == null)
+                return;
+
+            _favoriteFilesService.Save(visualCard.FilePath, false);
+            FavoriteCards.AddLast(visualCard);
         }
 
         private VisualCard CreateCard(string filePath)

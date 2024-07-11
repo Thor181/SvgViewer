@@ -10,5 +10,6 @@ namespace SvgViewer.V2.Utils
     {
         public readonly static string File = "File";
         public readonly static string Directory = "Directory";
+        public readonly static string Favorite = "Favorite";
     }
 }

@@ -39,6 +39,8 @@ namespace SvgViewer.V2
                 (x, key) => new LastEntityService(Path.Combine("Configuration", "LastFiles.json")));
             servicesCollection.AddKeyedSingleton<LastEntityService>(LastEntityServiceKeys.Directory, 
                 (x, key) => new LastEntityService(Path.Combine("Configuration", "LastDirectories.json")));
+            servicesCollection.AddKeyedSingleton<LastEntityService>(LastEntityServiceKeys.Favorite,
+                (x, key) => new LastEntityService(Path.Combine("Configuration", "FavoriteFiles.json")));
 
             servicesCollection.AddSingleton<ImageConverterService>();
             servicesCollection.AddSingleton<CacheService>();

@@ -10,6 +10,10 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="MainThemeColor"
+                             Color="LightCoral"></SolidColorBrush>
+            <SolidColorBrush x:Key="MainThemeAccentColor"
+                             Color="#FF326CF3"></SolidColorBrush>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
