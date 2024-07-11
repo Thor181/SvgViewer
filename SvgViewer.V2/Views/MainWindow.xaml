@@ -12,7 +12,9 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
-        Width="830"
+        MinHeight="450"
+        Width="880"
+        MinWidth="880"
         x:Name="MainWindowX"
         KeyDown="MainWindowX_KeyDown"
         Deactivated="MainWindowX_Deactivated">
@@ -91,12 +93,14 @@
         </Grid>
 
         <!--CONTENT-->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1"
+              x:Name="ContentGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*"></ColumnDefinition>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
+            <!--MAIN CONTENT-->
             <Grid Grid.Column="0">
 
                 <Border x:Name="MainBorder"
@@ -105,56 +109,15 @@
                         Margin="5"
                         BorderThickness="1"
                         BorderBrush="LightCoral"
-                        Padding="0 5 0 0">
+                        Padding="0 20 0 0">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="18"
                                           Opacity="0.4" />
                     </Border.Effect>
 
-
-                    <ItemsControl ItemsSource="{Binding Cards}"
-                                  Margin="5">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <views:CardView Card="{Binding}"
-                                                Margin="5"
-                                                ClickCommand="{Binding Path=DataContext.ClickCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
-                                                ClickCommandParameter="{Binding}"
-                                                Cursor="Hand">
-                                </views:CardView>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.Template>
-                            <ControlTemplate>
-                                <ScrollViewer x:Name="MainScrollViewer">
-                                    <VirtualizingStackPanel>
-                                        <ItemsPresenter />
-                                    </VirtualizingStackPanel>
-                                </ScrollViewer>
-                            </ControlTemplate>
-                        </ItemsControl.Template>
-                    </ItemsControl>
-
-                </Border>
-            </Grid>
-
-            <Grid Grid.Column="1">
-                <Border CornerRadius="8"
-                        Background="#FFEFEFEF"
-                        Margin="5"
-                        BorderThickness="1"
-                        BorderBrush="LightCoral">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="18"
-                                          Opacity="0.4" />
-                    </Border.Effect>
-                    <ScrollViewer>
-                        <ItemsControl ItemsSource="{Binding LastFilesCards}">
+                    <Grid>
+                        <ItemsControl ItemsSource="{Binding Cards}"
+                                      Margin="5">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <views:CardView Card="{Binding}"
@@ -170,10 +133,96 @@
                                     <WrapPanel />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
+                            <ItemsControl.Template>
+                                <ControlTemplate>
+                                    <ScrollViewer x:Name="MainScrollViewer">
+                                        <VirtualizingStackPanel>
+                                            <ItemsPresenter />
+                                        </VirtualizingStackPanel>
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
                         </ItemsControl>
-                    </ScrollViewer>
-                </Border>
+                        <Border Height="17"
+                                Width="150"
+                                VerticalAlignment="Top"
+                                Background="LightCoral"
+                                CornerRadius="0 0 5 5"
+                                Margin="0 -20 0 0">
+                            <TextBlock Text="SVG"
+                                       FontSize="12"
+                                       HorizontalAlignment="Center"></TextBlock>
+                        </Border>
+                        <!--<Grid Width="110" Height="14" VerticalAlignment="Top">
+                            <Polygon Margin="0 -4 0 0"
+                                     Points="0,0 100,0 90,12 10,12"
+                                     StrokeLineJoin="Round"
+                                     StrokeEndLineCap="Round"
+                                     StrokeStartLineCap="Round"
+                                     StrokeThickness="3"
+                                     Stroke="LightCoral"
+                                     Fill="LightCoral">
 
+                            </Polygon>
+                            <TextBlock Text="SVG" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                        </Grid>-->
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!--LAST FILES-->
+            <Grid Grid.Column="1">
+                <Border CornerRadius="8"
+                        Background="#FFEFEFEF"
+                        Margin="5"
+                        BorderThickness="1"
+                        Padding="0 20 0 0"
+                        BorderBrush="LightCoral">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="18"
+                                          Opacity="0.4" />
+                    </Border.Effect>
+                    <Grid>
+                        <ItemsControl ItemsSource="{Binding LastFilesCards}"
+                                      Margin="5">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <views:CardView Card="{Binding}"
+                                                    Margin="5"
+                                                    ClickCommand="{Binding Path=DataContext.ClickCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                                                    ClickCommandParameter="{Binding}"
+                                                    Cursor="Hand">
+                                    </views:CardView>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel IsItemsHost="True" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.Template>
+                                <ControlTemplate>
+                                    <ScrollViewer x:Name="MainScrollViewer">
+                                        <VirtualizingStackPanel>
+                                            <ItemsPresenter />
+                                        </VirtualizingStackPanel>
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                        </ItemsControl>
+
+                        <Border Width="70"
+                                Height="17"
+                                VerticalAlignment="Top"
+                                Background="LightCoral"
+                                CornerRadius="0 0 5 5"
+                                Margin="0 -20 0 0">
+                            <TextBlock Text="LAST SVG"
+                                       FontSize="12"
+                                       HorizontalAlignment="Center"></TextBlock>
+                        </Border>
+                    </Grid>
+                </Border>
             </Grid>
         </Grid>
 
@@ -206,16 +255,16 @@
 
         </Grid>
 
-        <hc:CircleProgressBar Visibility="{Binding IsLoading, Converter={StaticResource Boolean2VisibilityConverter}}"
+        <!--<hc:CircleProgressBar Visibility="{Binding IsLoading, Converter={StaticResource Boolean2VisibilityConverter}}"
                               Grid.RowSpan="10"
                               IsIndeterminate="True"
                               VerticalAlignment="Center"
                               HorizontalAlignment="Center"
                               Width="70"
                               Height="30"
-                              ArcThickness="7" />
+                              ArcThickness="7" />-->
 
-        <Popup IsOpen="{Binding ElementName=DirectoryInput, Path=IsFocused, Mode=OneWay}"
+        <Popup x:Name="LastDirectoriesPopup" IsOpen="{Binding ElementName=DirectoryInput, Path=IsFocused, Mode=OneWay}"
                StaysOpen="True"
                PlacementTarget="{Binding ElementName=DirectoryInput}"
                Placement="Bottom"
