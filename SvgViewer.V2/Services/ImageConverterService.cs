@@ -13,6 +13,9 @@ namespace SvgViewer.V2.Services
     {
         public byte[] ConvertSvgToPng(string svgPath)
         {
+            if (string.IsNullOrEmpty(svgPath))
+                return Array.Empty<byte>();
+
             var svg = SvgDocument.Open(svgPath);
             var bmp = svg.Draw(100, 100);
 
