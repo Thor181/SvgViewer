@@ -11,7 +11,7 @@ namespace SvgViewer.V2.Services
     {
         public void Set(string path)
         {
-            Clipboard.SetText(path);
+            Clipboard.SetDataObject(path, true);
         }
     }
 }
