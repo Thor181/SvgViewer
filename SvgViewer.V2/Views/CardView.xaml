@@ -1,12 +1,16 @@
 ﻿<UserControl x:Class="SvgViewer.V2.Views.CardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SvgViewer.V2.Views"
              xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
-             mc:Ignorable="d" 
-             Height="100" Width="100" d:DataContext="{Binding RelativeSource={RelativeSource Self}}" Mouse.MouseDown="UserControl_MouseDown">
+             mc:Ignorable="d"
+             Height="100"
+             Width="100"
+             d:DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             Mouse.MouseDown="UserControl_MouseDown"
+             Visibility="{Binding IsVisible, Converter={StaticResource Boolean2VisibilityConverter}}">
     <Grid d:Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
@@ -16,6 +20,10 @@
                Source="{Binding Thumbnail}"
                d:Source="/Template.png"></Image>
         <!--<svg:SvgViewbox Grid.Row="0" Source="{Binding FilePath}"></svg:SvgViewbox>-->
-        <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Center" TextTrimming="WordEllipsis" d:Text="Name_of_picture_something_else"></TextBlock>
+        <TextBlock Grid.Row="1"
+                   Text="{Binding Name}"
+                   HorizontalAlignment="Center"
+                   TextTrimming="WordEllipsis"
+                   d:Text="Name_of_picture_something_else"></TextBlock>
     </Grid>
 </UserControl>

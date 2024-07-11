@@ -19,13 +19,13 @@ namespace SvgViewer.V2.Views
 {
     public partial class CardView : UserControl
     {
-        public static readonly DependencyProperty CardProperty = DependencyProperty.Register(nameof(Card), typeof(Card), typeof(CardView));
+        public static readonly DependencyProperty CardProperty = DependencyProperty.Register(nameof(Card), typeof(VisualCard), typeof(CardView));
         public static readonly DependencyProperty ClickCommandProperty = DependencyProperty.Register(nameof(ClickCommand), typeof(ICommand), typeof(CardView));
-        public static readonly DependencyProperty ClickCommandParameterProperty = DependencyProperty.Register(nameof(ClickCommandParameter), typeof(Card), typeof(CardView));
+        public static readonly DependencyProperty ClickCommandParameterProperty = DependencyProperty.Register(nameof(ClickCommandParameter), typeof(VisualCard), typeof(CardView));
 
-        public Card Card { get => (Card)GetValue(CardProperty); set => SetValue(CardProperty, value); }
+        public VisualCard Card { get => (VisualCard)GetValue(CardProperty); set => SetValue(CardProperty, value); }
         public ICommand ClickCommand { get => (ICommand)GetValue(ClickCommandProperty); set => SetValue(ClickCommandProperty, value); }
-        public Card ClickCommandParameter { get => (Card)GetValue(ClickCommandParameterProperty); set => SetValue(ClickCommandParameterProperty, value); }
+        public VisualCard ClickCommandParameter { get => (VisualCard)GetValue(ClickCommandParameterProperty); set => SetValue(ClickCommandParameterProperty, value); }
 
         //public byte[] ThumbnailPath { get => Card.ThumbnailPath; set => Card.ThumbnailPath = value; }
 

@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace SvgViewer.V2.Models
 {
-    public class Card
+    public class Card : ObservableObject
     {
         public string FilePath { get; set; }
         public string Name { get; set; }
@@ -23,6 +23,9 @@ namespace SvgViewer.V2.Models
             Thumbnail = thumbnail;
         }
 
-        
+        public virtual Card Clone()
+        {
+            return new Card(FilePath, Name, Thumbnail) { IsLastFile = IsLastFile };
+        }
     }
 }

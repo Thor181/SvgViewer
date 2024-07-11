@@ -69,6 +69,11 @@
                             hc:InfoElement.Placeholder="Search"
                             VerticalContentAlignment="Center"
                             Height="25">
+                    <hc:TextBox.InputBindings>
+                        <KeyBinding Key="Enter"
+                                    Command="{Binding SearchInputCommand}"
+                                    CommandParameter="{Binding Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type hc:TextBox}}}" />
+                    </hc:TextBox.InputBindings>
                 </hc:TextBox>
             </StackPanel>
 
@@ -264,7 +269,8 @@
                               Height="30"
                               ArcThickness="7" />-->
 
-        <Popup x:Name="LastDirectoriesPopup" IsOpen="{Binding ElementName=DirectoryInput, Path=IsFocused, Mode=OneWay}"
+        <Popup x:Name="LastDirectoriesPopup"
+               IsOpen="{Binding ElementName=DirectoryInput, Path=IsFocused, Mode=OneWay}"
                StaysOpen="True"
                PlacementTarget="{Binding ElementName=DirectoryInput}"
                Placement="Bottom"

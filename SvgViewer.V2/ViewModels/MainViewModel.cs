@@ -35,16 +35,17 @@ namespace SvgViewer.V2.ViewModels
         private readonly ImageConverterService _imageConverterService;
         private readonly CacheService _cacheService;
 
-        public ObservableCollection<Card> Cards { get; set; } = [];
+        public ObservableCollection<VisualCard> Cards { get; set; } = [];
 
-        private ObservableLinkedList<Card> _lastFilesCards = new();
-        public ObservableLinkedList<Card> LastFilesCards { get => _lastFilesCards; set => SetProperty(ref _lastFilesCards, value); }
+        private ObservableLinkedList<VisualCard> _lastFilesCards = new();
+        public ObservableLinkedList<VisualCard> LastFilesCards { get => _lastFilesCards; set => SetProperty(ref _lastFilesCards, value); }
 
         private string[] _lastDirectories = [];
         public string[] LastDirectories { get => _lastDirectoriesService.Load(); set => SetProperty(ref _lastDirectories, value); }
 
         public ICommand ClickCommand { get; set; }
         public ICommand DirectoryInputCommand { get; set; }
+        public ICommand SearchInputCommand { get; set; }
 
         public string Version { get => _versionService.Version ?? string.Empty; }
 
@@ -76,8 +77,29 @@ namespace SvgViewer.V2.ViewModels
 
             InitializeLastFiles();
 
-            ClickCommand = new RelayCommand<Card>(HandleCardClick);
+            ClickCommand = new RelayCommand<VisualCard>(HandleCardClick);
             DirectoryInputCommand = new RelayCommand<string>(HandleDirectoryInput);
+            SearchInputCommand = new RelayCommand<string>(HandleSearchInput);
+        }
+
+        private void HandleSearchInput(string? searchText)
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                foreach (var item in Cards)
+                {
+                    item.IsVisible = true;
+                }
+
+                return;
+            }
+
+            searchText = searchText.ToLower();
+
+            foreach (var item in Cards)
+            {
+                item.IsVisible = item.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase);
+            }
         }
 
         private void InitializeLastFiles()
@@ -93,7 +115,7 @@ namespace SvgViewer.V2.ViewModels
             }
         }
 
-        private void HandleCardClick(Card? card)
+        private void HandleCardClick(VisualCard? card)
         {
             if (card == null)
             {
@@ -160,7 +182,7 @@ namespace SvgViewer.V2.ViewModels
             _lastDirectoriesService.Save(parameter, LastDirectories.Length == 10);
         }
 
-        private Card CreateCard(string filePath)
+        private VisualCard CreateCard(string filePath)
         {
             byte[] thumbnail = Array.Empty<byte>();
             var loadedFromCache = false;
@@ -177,7 +199,7 @@ namespace SvgViewer.V2.ViewModels
 
             var fileName = Path.GetFileName(filePath);
 
-            var card = new Card(filePath, fileName, thumbnail);
+            var card = new VisualCard(filePath, fileName, thumbnail, true);
 
             if (_cacheEnabled && !loadedFromCache)
                 _cacheService.Cache(thumbnail, filePath);
