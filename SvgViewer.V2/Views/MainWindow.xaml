@@ -10,7 +10,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:svc="clr-namespace:SvgViewer.V2.Services"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="SvgViewer"
         Height="450"
         MinHeight="450"
         Width="880"
