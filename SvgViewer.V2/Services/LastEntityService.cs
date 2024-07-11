@@ -30,33 +30,41 @@ namespace SvgViewer.V2.Services
 
         public string[] Load()
         {
-            var lastDirectories = LoadLastDirectories();
+            var lastEntities = LoadLastEntities();
 
-            if (lastDirectories == null || lastDirectories.Count == 0)
+            if (lastEntities == null || lastEntities.Count == 0)
                 return Array.Empty<string>();
 
-            return lastDirectories.Select(x => x.Path).ToArray();
+            return lastEntities.Select(x => x.Path).ToArray();
         }
 
-        public void Save(string path)
+        public void Save(string path, bool removeLast)
         {
-            var lastDirectories = LoadLastDirectories() 
+            var lastEntities = LoadLastEntities()
                 ?? [];
 
-            if (ContainsWithIgnoreCase(lastDirectories, path))
+            if (ContainsWithIgnoreCase(lastEntities, path))
                 return;
 
-            lastDirectories.Add(new LastEntity(path));
+            var lastEntitiesEnumerable = lastEntities.Prepend(new LastEntity(path))
+                                                     .Select(x => x.Path);
 
-            var array = lastDirectories.Select(x => x.Path).ToArray();
+            if (removeLast)
+            {
+                var lastEntry = lastEntitiesEnumerable.Last();
+                lastEntitiesEnumerable = lastEntitiesEnumerable.TakeWhile(x => lastEntry != x);
+            }
+
+            var array = lastEntitiesEnumerable.ToArray();
+
             var json = JsonSerializer.Serialize(array, _jsonSerializerOptions);
 
             File.WriteAllText(_path, json);
         }
 
-        private List<LastEntity>? LoadLastDirectories()
+        private List<LastEntity>? LoadLastEntities()
         {
-            var directory = Path.GetDirectoryName(_path) 
+            var directory = Path.GetDirectoryName(_path)
                 ?? throw new InvalidOperationException($"Directory is not evaluated from path: {_path}");
 
             if (!Directory.Exists(directory))
