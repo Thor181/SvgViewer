@@ -39,7 +39,9 @@
                 Margin="2"
                 Click="Button_Click"
                 Visibility="{Binding CanFavoriteClickCommand, Converter={StaticResource Boolean2VisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
-            <Button.Content></Button.Content>
+            <Button.Content>
+                <Image Source="/Resources/favorite.png"></Image>
+            </Button.Content>
         </Button>
     </Grid>
 </UserControl>
