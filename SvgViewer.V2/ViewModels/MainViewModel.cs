@@ -36,7 +36,6 @@ namespace SvgViewer.V2.ViewModels
         private readonly CacheService _cacheService;
 
         public ObservableCollection<Card> Cards { get; set; } = [];
-        public ObservableCollection<Card> LastFilesCards { get; set; } = [];
 
         private ObservableLinkedList<Card> _lastFilesCards = new();
         public ObservableLinkedList<Card> LastFilesCards { get => _lastFilesCards; set => SetProperty(ref _lastFilesCards, value); }
@@ -58,9 +57,6 @@ namespace SvgViewer.V2.ViewModels
         private double _progress = 0;
         public double Progress { get => _progress; set => SetProperty(ref _progress, value); }
 
-        private string _selectedPath = string.Empty;
-        public string SelectedPath { get => _selectedPath; set { SetProperty(ref _selectedPath, value); } }
-
         private bool _cacheEnabled = false;
         private int _maxCountLastFiles = 0;
 
@@ -76,25 +72,28 @@ namespace SvgViewer.V2.ViewModels
             var configuration = App.ServiceProvider.GetRequiredService<IConfiguration>();
 
             _cacheEnabled = Convert.ToBoolean(configuration.GetRequiredSection("CacheEnabled").Value);
+            _maxCountLastFiles = Convert.ToInt32(configuration.GetRequiredSection("MaxCountLastFiles").Value);
 
-            LastFilesCards.CollectionChanged += LastFilesCardsChanged;
+            InitializeLastFiles();
 
-            ClickCommand = new RelayCommand<Card>(HandleClick);
+            ClickCommand = new RelayCommand<Card>(HandleCardClick);
             DirectoryInputCommand = new RelayCommand<string>(HandleDirectoryInput);
         }
 
-        private void LastFilesCardsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        private void InitializeLastFiles()
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            var lastFiles = _lastFilesService.Load();
+
+            foreach (var file in lastFiles)
             {
-                if (e.NewItems?[0] is SvgViewer.V2.Models.Card card)
-                {
-                    _lastFilesService.Save(card.FilePath);
-                }
+                var card = CreateCard(file);
+                card.IsLastFile = true;
+
+                LastFilesCards.AddFirst(card);
             }
         }
 
-        private void HandleClick(Card? card)
+        private void HandleCardClick(Card? card)
         {
             if (card == null)
             {
@@ -151,38 +150,39 @@ namespace SvgViewer.V2.ViewModels
 
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    byte[] thumbnail = Array.Empty<byte>();
-                    var loadedFromCache = false;
-
-                    if (_cacheService.TryLoadFromCache(filePath, out byte[] data))
-                    {
-                        thumbnail = data;
-                        loadedFromCache = true;
-                    }
-                    else
-                        thumbnail = _imageConverterService.ConvertSvgToPng(filePath);
-
-                    var fileName = Path.GetFileName(filePath);
-                    Cards.Add(new Card(filePath, fileName, thumbnail));
-
-                    if (_cacheEnabled && !loadedFromCache)
-                        _cacheService.Cache(thumbnail, filePath);
+                    var card = CreateCard(filePath);
+                    Cards.Add(card);
 
                     Progress = (double)i / filePaths.Length * 100d;
                 }, System.Windows.Threading.DispatcherPriority.Input);
             }
 
-            _lastDirectoriesService.Save(parameter);
+            _lastDirectoriesService.Save(parameter, LastDirectories.Length == 10);
         }
 
-        protected override void OnPropertyChanging(PropertyChangingEventArgs e)
+        private Card CreateCard(string filePath)
         {
-            if (e.PropertyName == nameof(SelectedPath))
+            byte[] thumbnail = Array.Empty<byte>();
+            var loadedFromCache = false;
+
+            if (_cacheService.TryLoadFromCache(filePath, out byte[] data))
             {
-                HandleDirectoryInput(SelectedPath);
+                thumbnail = data;
+                loadedFromCache = true;
+            }
+            else
+            {
+                thumbnail = _imageConverterService.ConvertSvgToPng(filePath);
             }
 
-            base.OnPropertyChanging(e);
+            var fileName = Path.GetFileName(filePath);
+
+            var card = new Card(filePath, fileName, thumbnail);
+
+            if (_cacheEnabled && !loadedFromCache)
+                _cacheService.Cache(thumbnail, filePath);
+
+            return card;
         }
     }
 }
