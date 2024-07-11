@@ -38,6 +38,9 @@ namespace SvgViewer.V2.ViewModels
         public ObservableCollection<Card> Cards { get; set; } = [];
         public ObservableCollection<Card> LastFilesCards { get; set; } = [];
 
+        private ObservableLinkedList<Card> _lastFilesCards = new();
+        public ObservableLinkedList<Card> LastFilesCards { get => _lastFilesCards; set => SetProperty(ref _lastFilesCards, value); }
+
         private string[] _lastDirectories = [];
         public string[] LastDirectories { get => _lastDirectoriesService.Load(); set => SetProperty(ref _lastDirectories, value); }
 
@@ -59,6 +62,7 @@ namespace SvgViewer.V2.ViewModels
         public string SelectedPath { get => _selectedPath; set { SetProperty(ref _selectedPath, value); } }
 
         private bool _cacheEnabled = false;
+        private int _maxCountLastFiles = 0;
 
         public MainViewModel()
         {
@@ -101,13 +105,26 @@ namespace SvgViewer.V2.ViewModels
             try
             {
                 _clipboardService.Set(card.FilePath);
-                LastFilesCards.Add(card);
+
+                var cloneCard = card.Clone();
+                cloneCard.IsLastFile = true;
+
+                LastFilesCards.AddFirst(cloneCard);
+
+                var removeLast = LastFilesCards.Count > _maxCountLastFiles;
+                _lastFilesService.Save(card.FilePath, removeLast);
+
+                if (removeLast)
+                    LastFilesCards.RemoveLast();
 
                 HandyControl.Controls.Growl.Success(SuccessGrowlInfo.Instance);
             }
             catch (Exception)
             {
                 HandyControl.Controls.Growl.Error(ErrorGrowlInfo.Instance);
+#if DEBUG
+                throw;
+#endif
             }
         }
 
