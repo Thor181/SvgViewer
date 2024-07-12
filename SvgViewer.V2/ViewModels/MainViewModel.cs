@@ -111,6 +111,7 @@ namespace SvgViewer.V2.ViewModels
             foreach (var item in favorites)
             {
                 var card = CreateCard(item);
+                card.IsFavorite = true;
 
                 FavoriteCards.AddLast(card);
             }
@@ -128,6 +129,25 @@ namespace SvgViewer.V2.ViewModels
             {
                 _clipboardService.Set(card.FilePath);
 
+                HandyControl.Controls.Growl.Success(SuccessGrowlInfo.Instance);
+
+                if (CardEqualityComparer.Instance.Equals(LastFilesCards.First, card))
+                    return;
+
+                if (LastFilesCards.Contains(card, CardEqualityComparer.Instance))
+                {
+                    var forMove = LastFilesCards.FirstOrDefault(x => CardEqualityComparer.Instance.Equals(x, card));
+
+                    if (forMove != null)
+                    {
+                        _lastFilesService.Move(forMove.FilePath, Placement.Begin);
+
+                        LastFilesCards.Move(forMove, Placement.Begin);
+                    }
+
+                    return;
+                }
+
                 var cloneCard = card.Clone();
                 cloneCard.IsLastFile = true;
 
@@ -138,8 +158,6 @@ namespace SvgViewer.V2.ViewModels
 
                 if (removeLast)
                     LastFilesCards.RemoveLast();
-
-                HandyControl.Controls.Growl.Success(SuccessGrowlInfo.Instance);
             }
             catch (Exception)
             {
@@ -226,9 +244,9 @@ namespace SvgViewer.V2.ViewModels
             {
                 visualCard.IsFavorite = true;
 
-            _favoriteFilesService.Save(visualCard.FilePath, false);
-            FavoriteCards.AddLast(visualCard);
-        }
+                _favoriteFilesService.Save(visualCard.FilePath, false);
+                FavoriteCards.AddLast(visualCard);
+            }
         }
 
         private VisualCard CreateCard(string filePath)

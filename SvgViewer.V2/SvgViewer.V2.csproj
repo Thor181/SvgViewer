@@ -14,10 +14,17 @@
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<Authors>ArtemThor, Thor181</Authors>
+		<ApplicationIcon>Resources\icon.ico</ApplicationIcon>
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <None Remove="Resources\favorite.svg" />
+	  <None Remove="Resources\favorite_out.svg" />
 	  <None Remove="Template.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Content Include="Resources\icon.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,12 +39,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Resources\favorite.svg" />
+	  <Resource Include="Resources\favorite_out.svg" />
 	  <Resource Include="Resources\Template.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Resources\icon.ico">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="_appSettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
