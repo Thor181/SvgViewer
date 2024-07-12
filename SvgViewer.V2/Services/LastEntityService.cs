@@ -1,4 +1,5 @@
 ﻿using SvgViewer.V2.Models;
+using SvgViewer.V2.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SvgViewer.V2.Services
 {
@@ -57,7 +59,54 @@ namespace SvgViewer.V2.Services
 
             var array = lastEntitiesEnumerable.ToArray();
 
-            var json = JsonSerializer.Serialize(array, _jsonSerializerOptions);
+            SaveLastEntitiesInternal(array);
+        }
+
+        public void Move(string path, Placement placement)
+        {
+            var lastEntities = LoadLastEntities();
+
+            if (lastEntities == null || lastEntities.Count == 0)
+                return;
+
+            if (!ContainsWithIgnoreCase(lastEntities, path))
+                return;
+
+            lastEntities.RemoveAll(x =>  x.Path == path);
+
+            if (placement == Placement.End)
+                lastEntities.Add(new LastEntity(path));
+            else if (placement == Placement.Begin)
+                lastEntities = lastEntities.Prepend(new LastEntity(path)).ToList();
+
+            SaveLastEntities(lastEntities);
+        }
+
+        public void Remove(string path)
+        {
+            var lastEntities = LoadLastEntities();
+
+            if (lastEntities == null || lastEntities.Count == 0)
+                return;
+
+            if (!ContainsWithIgnoreCase(lastEntities, path))
+                return;
+
+            lastEntities.RemoveAll(x => x.Path == path);
+
+            SaveLastEntities(lastEntities);
+        }
+
+        private void SaveLastEntities(IEnumerable<LastEntity> lastEntities)
+        {
+            var array = lastEntities.Select(x => x.Path).ToArray();
+
+            SaveLastEntitiesInternal(array);
+        }
+
+        private void SaveLastEntitiesInternal(string[] paths)
+        {
+            var json = JsonSerializer.Serialize(paths, _jsonSerializerOptions);
 
             File.WriteAllText(_path, json);
         }
