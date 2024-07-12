@@ -16,6 +16,9 @@ namespace SvgViewer.V2.Models
         public byte[] Thumbnail { get; set; }
         public bool IsLastFile { get; set; }
 
+        private bool _isFavorite;
+        public bool IsFavorite { get => _isFavorite; set => SetProperty(ref _isFavorite, value); }
+
         public Card(string path, string name, byte[] thumbnail)
         {
             FilePath = path;
@@ -25,7 +28,7 @@ namespace SvgViewer.V2.Models
 
         public virtual Card Clone()
         {
-            return new Card(FilePath, Name, Thumbnail) { IsLastFile = IsLastFile };
+            return new Card(this.FilePath, this.Name, this.Thumbnail) { IsLastFile = this.IsLastFile, IsFavorite = this.IsFavorite };
         }
     }
 }

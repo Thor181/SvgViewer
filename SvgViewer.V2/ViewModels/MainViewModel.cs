@@ -174,6 +174,9 @@ namespace SvgViewer.V2.ViewModels
                 App.Current.Dispatcher.Invoke(() =>
                 {
                     var card = CreateCard(filePath);
+
+                    card.IsFavorite = FavoriteCards.Any(x => x.FilePath == card.FilePath);
+
                     Cards.Add(card);
 
                     Progress = (double)i / filePaths.Length * 100d;
@@ -208,8 +211,24 @@ namespace SvgViewer.V2.ViewModels
             if (visualCard == null)
                 return;
 
+            if (visualCard.IsFavorite)
+            {
+                visualCard.IsFavorite = false;
+
+                _favoriteFilesService.Remove(visualCard.FilePath);
+
+                var forRemove = FavoriteCards.FirstOrDefault(x => x.FilePath == visualCard.FilePath);
+
+                if (forRemove != null)
+                    FavoriteCards.Remove(forRemove);
+            }
+            else
+            {
+                visualCard.IsFavorite = true;
+
             _favoriteFilesService.Save(visualCard.FilePath, false);
             FavoriteCards.AddLast(visualCard);
+        }
         }
 
         private VisualCard CreateCard(string filePath)

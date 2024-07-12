@@ -40,7 +40,7 @@ namespace SvgViewer.V2
 
             DirectoryInput.Focus();
             
-            LastDirectoriesPopup.IsOpen = false;
+            
             
         }
     }

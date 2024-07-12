@@ -19,7 +19,7 @@ namespace SvgViewer.V2.Models
 
         public override VisualCard Clone()
         {
-            return new VisualCard(this.FilePath, this.Name, this.Thumbnail, this.IsVisible) { IsLastFile = IsLastFile};
+            return new VisualCard(this.FilePath, this.Name, this.Thumbnail, this.IsVisible) { IsLastFile = IsLastFile, IsFavorite = this.IsFavorite};
         }
     }
 }

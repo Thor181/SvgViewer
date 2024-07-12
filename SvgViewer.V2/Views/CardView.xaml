@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SvgViewer.V2.Views"
              xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:converters="clr-namespace:SvgViewer.V2.Converters"
              mc:Ignorable="d"
              Height="100"
              Width="100"
@@ -12,7 +13,14 @@
              Mouse.MouseDown="UserControl_MouseDown"
              d:Visibility="Visible"
              Visibility="{Binding IsVisible, Converter={StaticResource Boolean2VisibilityConverter}}">
-    
+
+    <UserControl.Resources>
+        <RelativeSource x:Key="Self"
+                        Mode="FindAncestor"
+                        AncestorType="{x:Type UserControl}"></RelativeSource>
+        <converters:VisibilityRevertConverter x:Key="VisibilityRevertConverter"></converters:VisibilityRevertConverter>
+    </UserControl.Resources>
+
     <Grid d:Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
@@ -29,18 +37,25 @@
                    TextTrimming="WordEllipsis"
                    d:Text="Name_of_picture_something_else"></TextBlock>
 
-        <Button 
-                Width="15"
+        <Button Width="15"
                 Height="15"
-                Padding="0 -2 0 0"
+                Padding="0.1"
+                Background="Transparent"
+                BorderBrush="Transparent"
                 FontSize="12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Margin="2"
                 Click="Button_Click"
-                Visibility="{Binding CanFavoriteClickCommand, Converter={StaticResource Boolean2VisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+                Visibility="{Binding CanFavoriteClickCommand, Converter={StaticResource Boolean2VisibilityConverter}, RelativeSource={StaticResource Self}}">
             <Button.Content>
-                <Image Source="/Resources/favorite.png"></Image>
+                <Grid>
+                    <svg:SvgViewbox x:Name="FavoriteOut"
+                                    Source="/Resources/favorite_out.svg" 
+                                    Visibility="{Binding IsFavorite, Converter={StaticResource Boolean2VisibilityReConverter}}" />
+                    <svg:SvgViewbox Source="/Resources/favorite.svg"
+                                    Visibility="{Binding ElementName=FavoriteOut, Path=Visibility, Converter={StaticResource VisibilityRevertConverter}}" />
+                </Grid>
             </Button.Content>
         </Button>
     </Grid>

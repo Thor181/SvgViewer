@@ -232,7 +232,8 @@
                                                         Margin="5"
                                                         ClickCommand="{Binding Path=DataContext.ClickCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
                                                         ClickCommandParameter="{Binding}"
-                                                        CanFavoriteClickCommand="False"
+                                                        FavoriteClickCommand="{Binding Path=DataContext.FavoriteClickCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                                                        CanFavoriteClickCommand="True"
                                                         Cursor="Hand">
                                         </views:CardView>
                                     </DataTemplate>
