@@ -10,7 +10,23 @@ namespace SvgViewer.V2.Utils
 {
     public class ObservableLinkedList<T> : IEnumerable<T>, INotifyCollectionChanged
     {
+
         private readonly LinkedList<T> _linkedList = [];
+
+        public T? First
+        {
+            get
+            {
+                var node = _linkedList.First;
+
+                if (node == null)
+                    return default;
+
+                var value = node.Value;
+
+                return value;
+            }
+        }
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
@@ -30,10 +46,30 @@ namespace SvgViewer.V2.Utils
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
+        public void Move(T value, Placement placement)
+        {
+            if (value == null) 
+                throw new ArgumentNullException(nameof(value));
+
+            if (!_linkedList.Contains(value))
+                throw new InvalidOperationException("The collection does not contain the passed value");
+
+            _linkedList.Remove(value);
+
+            AddFirst(value);
+        }
+
         public void RemoveLast()
         {
             _linkedList.RemoveLast();
             
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        public void Remove(T value)
+        {
+            _linkedList.Remove(value);
+
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
