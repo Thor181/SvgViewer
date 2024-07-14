@@ -1,4 +1,5 @@
 ﻿using SvgViewer.V2.Models.Cache;
+using SvgViewer.V2.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,9 +13,9 @@ namespace SvgViewer.V2.Services
 {
     public class CacheService
     {
-        private const string _dataDirectoryPath = "Cache\\Data\\";
-        private const string _configDirectoryPath = "Cache\\Config\\";
-        private const string _mapFullPath = _configDirectoryPath + "Map.json";
+        private static readonly string _dataDirectoryPath = Path.Combine(Constants.Paths.RootDirectory, "Cache", "Data");
+        private static readonly string _configDirectoryPath = Path.Combine(Constants.Paths.RootDirectory, "Cache", "Config");
+        private static readonly string _mapFullPath = Path.Combine(_configDirectoryPath, "Map.json");
 
         private readonly CacheMap _cacheMap;
 

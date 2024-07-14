@@ -35,12 +35,15 @@ namespace SvgViewer.V2
             servicesCollection.AddSingleton<VersionService>();
             servicesCollection.AddSingleton<ClipboardService>();
 
+
+            var rootDirectory = Constants.Paths.RootDirectory;
+
             servicesCollection.AddKeyedSingleton<LastEntityService>(LastEntityServiceKeys.File, 
-                (x, key) => new LastEntityService(Path.Combine("Configuration", "LastFiles.json")));
+                (x, key) => new LastEntityService(Path.Combine(rootDirectory, "Configuration", "LastFiles.json")));
             servicesCollection.AddKeyedSingleton<LastEntityService>(LastEntityServiceKeys.Directory, 
-                (x, key) => new LastEntityService(Path.Combine("Configuration", "LastDirectories.json")));
+                (x, key) => new LastEntityService(Path.Combine(rootDirectory, "Configuration", "LastDirectories.json")));
             servicesCollection.AddKeyedSingleton<LastEntityService>(LastEntityServiceKeys.Favorite,
-                (x, key) => new LastEntityService(Path.Combine("Configuration", "FavoriteFiles.json")));
+                (x, key) => new LastEntityService(Path.Combine(rootDirectory, "Configuration", "FavoriteFiles.json")));
 
             servicesCollection.AddSingleton<ImageConverterService>();
             servicesCollection.AddSingleton<CacheService>();
