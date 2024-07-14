@@ -7,6 +7,7 @@ using Svg;
 using SvgViewer.V2.Models;
 using SvgViewer.V2.Services;
 using SvgViewer.V2.Utils;
+using SvgViewer.V2.Utils.Extensions;
 using SvgViewer.V2.Utils.Growl;
 using System;
 using System.Collections.Generic;
@@ -173,7 +174,7 @@ namespace SvgViewer.V2.ViewModels
             if (string.IsNullOrEmpty(parameter))
                 return;
 
-            if (!parameter.Contains(@":\"))
+            if (!parameter.Contains(@":\") || parameter.ContainsAny(Path.GetInvalidPathChars()))
                 return;
 
             parameter = parameter.Trim();

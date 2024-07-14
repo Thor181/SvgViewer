@@ -56,7 +56,7 @@ namespace SvgViewer.V2.Services
             if (string.IsNullOrEmpty(hashString))
                 return null;
 
-            if (_cacheMap.TryGetValue(hashString, out string? value))
+            if (_cacheMap.TryGetValue(hashString, out string? value) && File.Exists(value))
                 return File.ReadAllBytes(Path.Combine(_dataDirectoryPath, value));
 
             return null;
