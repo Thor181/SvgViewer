@@ -34,14 +34,21 @@ namespace SvgViewer.V2
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var box = sender as ListBox;
+            
+        }
 
-            DirectoryInput.Text = box.SelectedValue as string;
+        private void MainScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            
+        }
+
+        private void ListBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var box = sender as TextBlock;
+
+            DirectoryInput.Text = box.Text;
 
             DirectoryInput.Focus();
-            
-            
-            
         }
     }
 }

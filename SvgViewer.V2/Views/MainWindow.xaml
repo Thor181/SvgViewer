@@ -9,6 +9,7 @@
         xmlns:views="clr-namespace:SvgViewer.V2.Views"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:svc="clr-namespace:SvgViewer.V2.Services"
+        xmlns:converters="clr-namespace:SvgViewer.V2.Converters"
         mc:Ignorable="d"
         Title="SvgViewer"
         Height="450"
@@ -24,19 +25,28 @@
 
     <Window.Resources>
         <svc:VersionService x:Key="VersionService" />
-        <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
-            <Setter Property="CornerRadius" Value="8"></Setter>
-            <Setter Property="Background" Value="#FFEFEFEF"></Setter>
-            <Setter Property="Margin" Value="5"></Setter>
-            <Setter Property="BorderThickness" Value="1"></Setter>
-            <Setter Property="BorderBrush" Value="{DynamicResource MainThemeColor}"></Setter>
-            <Setter Property="Padding" Value="0 20 0 0"></Setter>
+        <Style x:Key="BorderStyle"
+               TargetType="{x:Type Border}">
+            <Setter Property="CornerRadius"
+                    Value="8"></Setter>
+            <Setter Property="Background"
+                    Value="#FFEFEFEF"></Setter>
+            <Setter Property="Margin"
+                    Value="5"></Setter>
+            <Setter Property="BorderThickness"
+                    Value="1"></Setter>
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource MainThemeColor}"></Setter>
+            <Setter Property="Padding"
+                    Value="0 20 0 0"></Setter>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="18" Opacity="0.4"></DropShadowEffect>
+                    <DropShadowEffect BlurRadius="18"
+                                      Opacity="0.4"></DropShadowEffect>
                 </Setter.Value>
             </Setter>
         </Style>
+        <converters:PopupVisibilityMultiConverter x:Key="PopupVisibilityMultiConverter" />
     </Window.Resources>
 
     <Grid>
@@ -120,7 +130,8 @@
             <!--MAIN CONTENT-->
             <Grid Grid.Column="0">
 
-                <Border x:Name="MainBorder" Style="{StaticResource BorderStyle}">
+                <Border x:Name="MainBorder"
+                        Style="{StaticResource BorderStyle}">
 
                     <Grid>
                         <ItemsControl ItemsSource="{Binding Cards}"
@@ -172,7 +183,7 @@
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                
+
                 <!--LAST FILES-->
                 <Grid Grid.Row="0">
                     <Border Style="{StaticResource BorderStyle}">
@@ -268,8 +279,8 @@
                     </Border>
                 </Grid>
             </Grid>
-            
-           
+
+
         </Grid>
 
         <!--FOOTER-->
@@ -298,15 +309,37 @@
                 </TextBlock>
             </StackPanel>
         </Grid>
+        
+        <!--LAST DIRECTORIES POPUP-->
         <Popup x:Name="LastDirectoriesPopup"
-               IsOpen="{Binding ElementName=DirectoryInput, Path=IsFocused, Mode=OneWay}"
                StaysOpen="True"
                PlacementTarget="{Binding ElementName=DirectoryInput}"
                Placement="Bottom"
                AllowsTransparency="True">
+            <Popup.IsOpen>
+                <MultiBinding Converter="{StaticResource PopupVisibilityMultiConverter}">
+                    <Binding ElementName="DirectoryInput"
+                             Path="IsFocused"
+                             Mode="OneWay" />
+                    <Binding ElementName="DirectoryInput"
+                             Path="Text"
+                             Mode="OneWay" />
+                </MultiBinding>
+            </Popup.IsOpen>
             <ListBox ItemsSource="{Binding LastDirectories}"
                      Style="{StaticResource ListBox.Small}"
-                     SelectionChanged="ListBox_SelectionChanged" />
+                     SelectionChanged="ListBox_SelectionChanged"
+                    >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock PreviewMouseLeftButtonDown="ListBox_MouseLeftButtonUp" Text="{Binding}">
+                           
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+
         </Popup>
 
     </Grid>
