@@ -27,7 +27,7 @@
             <RowDefinition Height="20"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Image Grid.Row="0"
+        <Image Grid.Row="0" 
                Source="{Binding Thumbnail}"
                d:Source="/Resources/Template.png"></Image>
 

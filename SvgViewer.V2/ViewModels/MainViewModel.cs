@@ -99,6 +99,10 @@ namespace SvgViewer.V2.ViewModels
             foreach (var file in lastFiles)
             {
                 var card = CreateCard(file);
+
+                if (card == null)
+                    continue;
+
                 card.IsLastFile = true;
 
                 LastFilesCards.AddFirst(card);
@@ -112,6 +116,10 @@ namespace SvgViewer.V2.ViewModels
             foreach (var item in favorites)
             {
                 var card = CreateCard(item);
+
+                if (card == null)
+                    continue;
+
                 card.IsFavorite = true;
 
                 FavoriteCards.AddLast(card);
@@ -194,6 +202,9 @@ namespace SvgViewer.V2.ViewModels
                 {
                     var card = CreateCard(filePath);
 
+                    if (card == null)
+                        return;
+
                     card.IsFavorite = FavoriteCards.Any(x => x.FilePath == card.FilePath);
 
                     Cards.Add(card);
@@ -250,7 +261,7 @@ namespace SvgViewer.V2.ViewModels
             }
         }
 
-        private VisualCard CreateCard(string filePath)
+        private VisualCard? CreateCard(string filePath)
         {
             byte[] thumbnail = Array.Empty<byte>();
             var loadedFromCache = false;
@@ -264,6 +275,9 @@ namespace SvgViewer.V2.ViewModels
             {
                 thumbnail = _imageConverterService.ConvertSvgToPng(filePath);
             }
+
+            if (thumbnail?.Length == 0)
+                return null;
 
             var fileName = Path.GetFileName(filePath);
 

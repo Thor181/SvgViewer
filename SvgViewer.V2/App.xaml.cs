@@ -16,11 +16,18 @@ namespace SvgViewer.V2
 
         public App()
         {
+            base.DispatcherUnhandledException += App_DispatcherUnhandledException;
+        }
+
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show($"Unhandled exception is occurred\n{e.Exception.Message}\n{e.Exception.StackTrace}");
         }
 
         static App()
         {
             ServiceProvider = ConfigureServices();
+
         }
 
         private static IServiceProvider ConfigureServices()
