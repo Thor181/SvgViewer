@@ -46,7 +46,7 @@ namespace SvgViewer.V2.Services
 
             SaveCacheMap(); 
 
-            File.WriteAllBytes(_dataDirectoryPath + newName, data);
+            File.WriteAllBytes(Path.Combine(_dataDirectoryPath, newName), data);
         }
 
         public byte[]? LoadFromCache(string name)
