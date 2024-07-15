@@ -17,7 +17,16 @@ namespace SvgViewer.V2.Services
                 return Array.Empty<byte>();
 
             var svg = SvgDocument.Open(svgPath);
-            var bmp = svg.Draw(100, 100);
+
+            var heightToWidthRatio = svg.Height / svg.Width;
+
+            var width = (int)(100);
+            var height = (int)(100 * heightToWidthRatio);
+
+            var bmp = svg.Draw(width, height);
+
+            if (bmp == null)
+                return Array.Empty<byte>();
 
             using var ms = new MemoryStream();
 
