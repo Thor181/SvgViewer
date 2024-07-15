@@ -198,7 +198,7 @@ namespace SvgViewer.V2.ViewModels
             {
                 string filePath = filePaths[i];
 
-                App.Current.Dispatcher.Invoke(() =>
+                App.Current?.Dispatcher.Invoke(() =>
                 {
                     var card = CreateCard(filePath);
 
