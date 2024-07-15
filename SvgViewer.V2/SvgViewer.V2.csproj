@@ -57,4 +57,12 @@
 		</None>
 	</ItemGroup>
 
+
+	<Target Name="CiPublish">
+		<Exec Command="dotnet publish $(MSBuildProjectFullPath) -c Release -o $(MSBuildProjectDirectory)\bin\ciPublish\simple\exe\"></Exec>
+		<Message Text="Simple publish is completed" Importance="high"></Message>
+		<Exec Command="dotnet publish $(MSBuildProjectFullPath) -a x86 -c Release --sc -o $(MSBuildProjectDirectory)\bin\ciPublish\selfContained\exe\"></Exec>
+		<Message Text="SelfContained publish is completed" Importance="high"></Message>
+	</Target>
+	
 </Project>
