@@ -276,15 +276,15 @@ namespace SvgViewer.V2.ViewModels
                 thumbnail = _imageConverterService.ConvertSvgToPng(filePath);
             }
 
-            if (thumbnail?.Length == 0)
+            if (thumbnail == null || thumbnail?.Length == 0)
                 return null;
 
             var fileName = Path.GetFileName(filePath);
 
-            var card = new VisualCard(filePath, fileName, thumbnail, true);
+            var card = new VisualCard(filePath, fileName, thumbnail!, true);
 
             if (_cacheEnabled && !loadedFromCache)
-                _cacheService.Cache(thumbnail, filePath);
+                _cacheService.Cache(thumbnail!, filePath);
 
             return card;
         }

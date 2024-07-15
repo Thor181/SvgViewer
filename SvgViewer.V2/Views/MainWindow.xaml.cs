@@ -46,7 +46,7 @@ namespace SvgViewer.V2
         {
             var box = sender as TextBlock;
 
-            DirectoryInput.Text = box.Text;
+            DirectoryInput.Text = box?.Text ?? string.Empty;
 
             DirectoryInput.Focus();
         }
