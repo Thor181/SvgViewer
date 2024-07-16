@@ -1,68 +1,79 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<Version>2.0.1.1</Version>
-	</PropertyGroup>
-	
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<UseWPF>true</UseWPF>
-		<Version>$(Version)</Version>
-		<AssemblyVersion>$(Version)</AssemblyVersion>
-		<FileVersion>$(Version)</FileVersion>
-		<Authors>ArtemThor, Thor181</Authors>
-		<ApplicationIcon>Resources\icon.ico</ApplicationIcon>
-		<SatelliteResourceLanguages>ru</SatelliteResourceLanguages>
-		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-	</PropertyGroup>
-	
-	<ItemGroup>
-	  <None Remove="Resources\favorite.svg" />
-	  <None Remove="Resources\favorite_out.svg" />
-	  <None Remove="Template.png" />
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <Content Include="Resources\icon.ico" />
-	</ItemGroup>
+    <PropertyGroup>
+        <Version>2.0.1.1</Version>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+        <Version>$(Version)</Version>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <FileVersion>$(Version)</FileVersion>
+        <Authors>ArtemThor, Thor181</Authors>
+        <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+        <SatelliteResourceLanguages>ru</SatelliteResourceLanguages>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <None Remove="Resources\favorite.svg" />
+      <None Remove="Resources\favorite_out.svg" />
+      <None Remove="Template.png" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Content Include="Resources\icon.ico" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="HandyControl" Version="3.5.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-		<PackageReference Include="SharpVectors" Version="1.8.4" />
-		<PackageReference Include="Svg" Version="3.4.7" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+        <PackageReference Include="HandyControl" Version="3.5.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="SharpVectors" Version="1.8.4" />
+        <PackageReference Include="Svg" Version="3.4.7" />
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Resource Include="Resources\favorite.svg" />
-	  <Resource Include="Resources\favorite_out.svg" />
-	  <Resource Include="Resources\Template.png">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Resource>
-	</ItemGroup>
+    <ItemGroup>
+      <Resource Include="Resources\favorite.svg" />
+      <Resource Include="Resources\favorite_out.svg" />
+      <Resource Include="Resources\Template.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Update="Resources\icon.ico">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="_appSettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
+    <ItemGroup>
+        <None Update="Resources\icon.ico">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="_appSettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 
-	<Target Name="CiPublish">
-		<Exec Command="dotnet publish $(MSBuildProjectFullPath) -c Release -o $(MSBuildProjectDirectory)\bin\ciPublish\simple\exe\"></Exec>
-		<Message Text="Simple publish is completed" Importance="high"></Message>
-		<Exec Command="dotnet publish $(MSBuildProjectFullPath) -a x86 -c Release --sc -o $(MSBuildProjectDirectory)\bin\ciPublish\selfContained\exe\"></Exec>
-		<Message Text="SelfContained publish is completed" Importance="high"></Message>
-	</Target>
-	
+    <Target Name="CiPublish">
+		<PropertyGroup>
+			<Path7z>G:\Programs\7-Zip\7z.exe</Path7z>
+			<CiPublishDir>$(MSBuildProjectDirectory)\bin\ciPublish\</CiPublishDir>
+			<SimpleDir>$(CiPublishDir)\simple\</SimpleDir>
+			<SelfDir>$(CiPublishDir)\selfContained\</SelfDir>
+		</PropertyGroup>
+		
+		<Exec Command="if exist rmdir $(CiPublishDir)"></Exec> <!--remove dir if exist-->
+        <Exec Command="dotnet publish $(MSBuildProjectFullPath) -c Release -o $(SimpleDir)\exe\"></Exec> <!--simple publish-->
+		<Exec Condition="Exists('$(Path7z)')" Command="$(Path7z) a $(SimpleDir)\arc\$(MSBuildProjectName).7z  $(SimpleDir)\exe\*"></Exec> <!--archive simple published-->
+        <Message Text="Simple publish is completed" Importance="high"></Message> <!--message-->
+        <Exec Command="dotnet publish $(MSBuildProjectFullPath) -a x86 -c Release --sc -o $(SelfDir)\exe\"></Exec>
+		<Exec Condition="Exists('$(Path7z)')" Command="$(Path7z) a $(SelfDir)\arc\$(MSBuildProjectName).7z  $(SelfDir)\exe\*"></Exec>
+        <Message Text="SelfContained publish is completed" Importance="high"></Message>
+		
+    </Target>
+    
 </Project>
