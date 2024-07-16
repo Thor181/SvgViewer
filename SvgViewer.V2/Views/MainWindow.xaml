@@ -10,6 +10,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:svc="clr-namespace:SvgViewer.V2.Services"
         xmlns:converters="clr-namespace:SvgViewer.V2.Converters"
+        xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
         Title="SvgViewer"
         Height="450"
@@ -220,7 +221,7 @@
                             <Border Width="70"
                                     Height="17"
                                     VerticalAlignment="Top"
-                                    Background="{DynamicResource MainThemeColor}"
+                                    Background="{StaticResource MainThemeColor}"
                                     CornerRadius="0 0 5 5"
                                     Margin="0 -20 0 0">
                                 <TextBlock Text="LAST SVG"
@@ -229,6 +230,21 @@
                             </Border>
                         </Grid>
                     </Border>
+                    <Button Background="Transparent"
+                            d:BorderBrush="Red"
+                            BorderBrush="Transparent"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Margin="7 8"
+                            Cursor="Hand"
+                            Padding="0"
+                            Width="20"
+                            Height="20">
+                        <Button.Content>
+                            <svg:SvgViewbox  d:Source="/Resources/Template.png"
+                                             Source="/Resources/trash.svg"></svg:SvgViewbox>
+                        </Button.Content>
+                    </Button>
                 </Grid>
 
                 <!--LAST FILES-->
@@ -309,7 +325,7 @@
                 </TextBlock>
             </StackPanel>
         </Grid>
-        
+
         <!--LAST DIRECTORIES POPUP-->
         <Popup x:Name="LastDirectoriesPopup"
                StaysOpen="True"
@@ -328,17 +344,17 @@
             </Popup.IsOpen>
             <ListBox ItemsSource="{Binding LastDirectories}"
                      Style="{StaticResource ListBox.Small}"
-                     SelectionChanged="ListBox_SelectionChanged"
-                    >
+                     SelectionChanged="ListBox_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock PreviewMouseLeftButtonDown="ListBox_MouseLeftButtonUp" Text="{Binding}">
-                           
+                        <TextBlock PreviewMouseLeftButtonDown="ListBox_MouseLeftButtonUp"
+                                   Text="{Binding}">
+
                         </TextBlock>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
+
 
         </Popup>
 

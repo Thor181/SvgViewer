@@ -22,6 +22,7 @@
     <ItemGroup>
       <None Remove="Resources\favorite.svg" />
       <None Remove="Resources\favorite_out.svg" />
+      <None Remove="Resources\trash.svg" />
       <None Remove="Template.png" />
     </ItemGroup>
     
@@ -45,6 +46,9 @@
       <Resource Include="Resources\favorite_out.svg" />
       <Resource Include="Resources\Template.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\trash.svg">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       </Resource>
     </ItemGroup>
 
