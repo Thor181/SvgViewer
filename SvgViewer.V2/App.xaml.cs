@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SvgViewer.V2.Services;
+using SvgViewer.V2.Services.Dialog;
 using SvgViewer.V2.Utils;
 using System.Configuration;
 using System.Data;
@@ -41,6 +42,7 @@ namespace SvgViewer.V2
             servicesCollection.AddSingleton(_ => config);
             servicesCollection.AddSingleton<VersionService>();
             servicesCollection.AddSingleton<ClipboardService>();
+            servicesCollection.AddScoped<IDialogService, DialogService>();
 
 
             var rootDirectory = Constants.Paths.RootDirectory;

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Svg;
 using SvgViewer.V2.Models;
 using SvgViewer.V2.Services;
+using SvgViewer.V2.Services.Dialog;
 using SvgViewer.V2.Utils;
 using SvgViewer.V2.Utils.Extensions;
 using SvgViewer.V2.Utils.Growl;
@@ -37,6 +38,7 @@ namespace SvgViewer.V2.ViewModels
         private readonly LastEntityService _favoriteFilesService;
         private readonly ImageConverterService _imageConverterService;
         private readonly CacheService _cacheService;
+        private readonly IDialogService _dialogService;
 
         public ObservableCollection<VisualCard> Cards { get; set; } = [];
 
@@ -77,6 +79,7 @@ namespace SvgViewer.V2.ViewModels
             _favoriteFilesService = App.ServiceProvider.GetRequiredKeyedService<LastEntityService>(LastEntityServiceKeys.Favorite);
             _cacheService = App.ServiceProvider.GetRequiredService<CacheService>();
             _imageConverterService = App.ServiceProvider.GetRequiredService<ImageConverterService>();
+            _dialogService = App.ServiceProvider.GetRequiredService<IDialogService>();
 
             var configuration = App.ServiceProvider.GetRequiredService<IConfiguration>();
 
@@ -183,9 +186,18 @@ namespace SvgViewer.V2.ViewModels
                 return;
 
             if (!parameter.Contains(@":\") || parameter.ContainsAny(Path.GetInvalidPathChars()))
+            {
+                _dialogService.ShowDialog("Путь не является абсолютным или содержит недопустимые символы");
                 return;
+            }
 
             parameter = parameter.Trim();
+
+            if (!Directory.Exists(parameter))
+            {
+                _dialogService.ShowDialog("Путь не существует");
+                return;
+            }
 
             string[] filePaths = Directory.GetFiles(parameter, "*.svg", new EnumerationOptions()
             {
