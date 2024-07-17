@@ -50,5 +50,17 @@ namespace SvgViewer.V2
 
             DirectoryInput.Focus();
         }
+
+        private void RemoveButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+            RemoveButtonScaleTransform.ScaleX = 1.12;
+            RemoveButtonScaleTransform.ScaleY = 1.12;
+        }
+
+        private void RemoveButton_MouseLeave(object sender, MouseEventArgs e)
+        {
+            RemoveButtonScaleTransform.ScaleX = 1;
+            RemoveButtonScaleTransform.ScaleY = 1;
+        }
     }
 }

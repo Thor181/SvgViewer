@@ -56,5 +56,18 @@ namespace SvgViewer.V2.Views
             SetValue(dp, value);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
+        private void UserControl_MouseEnter(object sender, MouseEventArgs e)
+        {
+            const double scaleFactor = 1.05;
+            CardScaleTransform.ScaleX = scaleFactor;
+            CardScaleTransform.ScaleY = scaleFactor;
+        }
+
+        private void UserControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            CardScaleTransform.ScaleX = 1;
+            CardScaleTransform.ScaleY = 1;
+        }
     }
 }

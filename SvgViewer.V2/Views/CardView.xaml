@@ -12,7 +12,15 @@
              d:DataContext="{Binding RelativeSource={RelativeSource Self}}"
              Mouse.MouseDown="UserControl_MouseDown"
              d:Visibility="Visible"
-             Visibility="{Binding IsVisible, Converter={StaticResource Boolean2VisibilityConverter}}">
+             Visibility="{Binding IsVisible, Converter={StaticResource Boolean2VisibilityConverter}}"
+             RenderTransformOrigin="0.5 0.5"
+             MouseEnter="UserControl_MouseEnter"
+             MouseLeave="UserControl_MouseLeave">
+    <UserControl.RenderTransform>
+        <ScaleTransform x:Name="CardScaleTransform"
+                        ScaleX="1"
+                        ScaleY="1"></ScaleTransform>
+    </UserControl.RenderTransform>
 
     <UserControl.Resources>
         <RelativeSource x:Key="Self"
@@ -27,7 +35,7 @@
             <RowDefinition Height="20"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Image Grid.Row="0" 
+        <Image Grid.Row="0"
                Source="{Binding Thumbnail}"
                d:Source="/Resources/Template.png"></Image>
 
@@ -51,7 +59,7 @@
             <Button.Content>
                 <Grid>
                     <svg:SvgViewbox x:Name="FavoriteOut"
-                                    Source="/Resources/favorite_out.svg" 
+                                    Source="/Resources/favorite_out.svg"
                                     Visibility="{Binding IsFavorite, Converter={StaticResource Boolean2VisibilityReConverter}}" />
                     <svg:SvgViewbox Source="/Resources/favorite.svg"
                                     Visibility="{Binding ElementName=FavoriteOut, Path=Visibility, Converter={StaticResource VisibilityRevertConverter}}" />

@@ -230,20 +230,30 @@
                             </Border>
                         </Grid>
                     </Border>
-                    <Button Background="Transparent"
-                            d:BorderBrush="Red"
+                    <Button x:Name="RemoveButton"
+                            Background="Transparent"
                             BorderBrush="Transparent"
+                            d:BorderBrush="Red"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             Margin="7 8"
                             Cursor="Hand"
                             Padding="0"
                             Width="20"
-                            Height="20">
+                            Height="20"
+                            MouseEnter="RemoveButton_MouseEnter"
+                            MouseLeave="RemoveButton_MouseLeave"
+                            RenderTransformOrigin="0.5 0.5">
+                        <Button.RenderTransform>
+                            <ScaleTransform x:Name="RemoveButtonScaleTransform"
+                                            ScaleX="1"
+                                            ScaleY="1" />
+                        </Button.RenderTransform>
                         <Button.Content>
-                            <svg:SvgViewbox  d:Source="/Resources/Template.png"
-                                             Source="/Resources/trash.svg"></svg:SvgViewbox>
+                            <svg:SvgViewbox d:Source="/Resources/Template.png"
+                                            Source="/Resources/trash.svg"></svg:SvgViewbox>
                         </Button.Content>
+
                     </Button>
                 </Grid>
 
