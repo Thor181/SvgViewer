@@ -73,6 +73,13 @@ namespace SvgViewer.V2.Utils
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
+        public void Clear()
+        {
+            _linkedList.Clear();
+
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             return _linkedList.GetEnumerator();

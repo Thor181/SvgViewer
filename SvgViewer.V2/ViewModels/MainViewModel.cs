@@ -55,6 +55,7 @@ namespace SvgViewer.V2.ViewModels
         public ICommand DirectoryInputCommand { get; set; }
         public ICommand SearchInputCommand { get; set; }
         public ICommand FavoriteClickCommand { get; set; }
+        public ICommand RemoveButtonCommand { get; set; }
 
         public string Version { get => _versionService.Version ?? string.Empty; }
 
@@ -93,6 +94,7 @@ namespace SvgViewer.V2.ViewModels
             DirectoryInputCommand = new RelayCommand<string>(HandleDirectoryInput);
             SearchInputCommand = new RelayCommand<string>(HandleSearchInput);
             FavoriteClickCommand = new RelayCommand<VisualCard>(HandleFavoriteClick);
+            RemoveButtonCommand = new RelayCommand(HandleRemoveClick);
         }
 
         private void InitializeLastFiles()
@@ -271,6 +273,15 @@ namespace SvgViewer.V2.ViewModels
                 _favoriteFilesService.Save(visualCard.FilePath, false);
                 FavoriteCards.AddLast(visualCard);
             }
+        }
+
+        public void HandleRemoveClick()
+        {
+            if (_lastFilesCards.Count == 0) 
+                return;
+
+            _lastFilesService.Clear();
+            _lastFilesCards.Clear();
         }
 
         private VisualCard? CreateCard(string filePath)

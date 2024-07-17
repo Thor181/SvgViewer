@@ -97,6 +97,18 @@ namespace SvgViewer.V2.Services
             SaveLastEntities(lastEntities);
         }
 
+        public void Clear()
+        {
+            var lastEntities = LoadLastEntities();
+
+            if (lastEntities == null || lastEntities.Count == 0)
+                return;
+
+            lastEntities.Clear();
+
+            SaveLastEntities(lastEntities);
+        }
+
         private void SaveLastEntities(IEnumerable<LastEntity> lastEntities)
         {
             var array = lastEntities.Select(x => x.Path).ToArray();
