@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>2.0.2.0</Version>
+        <Version>2.0.3.0</Version>
     </PropertyGroup>
     
     <PropertyGroup>
@@ -67,9 +67,9 @@
     <Target Name="CiPublish">
 		<PropertyGroup>
 			<Path7z>G:\Programs\7-Zip\7z.exe</Path7z>
-			<CiPublishDir>$(MSBuildProjectDirectory)\bin\ciPublish\</CiPublishDir>
-			<SimpleDir>$(CiPublishDir)\simple\</SimpleDir>
-			<SelfDir>$(CiPublishDir)\selfContained\</SelfDir>
+			<CiPublishDir>$(MSBuildProjectDirectory)\bin\ciPublish</CiPublishDir>
+			<SimpleDir>$(CiPublishDir)\simple</SimpleDir>
+			<SelfDir>$(CiPublishDir)\selfContained</SelfDir>
 		</PropertyGroup>
 		
 		<Exec Command="if exist rmdir $(CiPublishDir)"></Exec> <!--remove dir if exist-->
