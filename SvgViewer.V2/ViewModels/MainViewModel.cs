@@ -56,6 +56,7 @@ namespace SvgViewer.V2.ViewModels
         public ICommand SearchInputCommand { get; set; }
         public ICommand FavoriteClickCommand { get; set; }
         public ICommand RemoveButtonCommand { get; set; }
+        public ICommand StopCommand { get; set; }
 
         public string Version { get => _versionService.Version ?? string.Empty; }
 
@@ -70,6 +71,9 @@ namespace SvgViewer.V2.ViewModels
 
         private bool _cacheEnabled = false;
         private int _maxCountLastFiles = 0;
+
+        private CancellationTokenSource _cts;
+        private CancellationToken _cancellationToken;
 
         public MainViewModel()
         {
@@ -95,6 +99,7 @@ namespace SvgViewer.V2.ViewModels
             SearchInputCommand = new RelayCommand<string>(HandleSearchInput);
             FavoriteClickCommand = new RelayCommand<VisualCard>(HandleFavoriteClick);
             RemoveButtonCommand = new RelayCommand(HandleRemoveClick);
+            StopCommand = new RelayCommand(HandleStopClick);
         }
 
         private void InitializeLastFiles()
@@ -201,6 +206,9 @@ namespace SvgViewer.V2.ViewModels
                 return;
             }
 
+            _cts = new CancellationTokenSource();
+            _cancellationToken = _cts.Token;
+
             string[] filePaths = Directory.GetFiles(parameter, "*.svg", new EnumerationOptions()
             {
                 MatchCasing = MatchCasing.CaseInsensitive,
@@ -210,6 +218,9 @@ namespace SvgViewer.V2.ViewModels
 
             for (int i = 0; i < filePaths.Length; i++)
             {
+                if (_cancellationToken.IsCancellationRequested)
+                    break;
+
                 string filePath = filePaths[i];
 
                 App.Current?.Dispatcher.Invoke(() =>
@@ -282,6 +293,11 @@ namespace SvgViewer.V2.ViewModels
 
             _lastFilesService.Clear();
             _lastFilesCards.Clear();
+        }
+
+        private void HandleStopClick()
+        {
+            _cts?.Cancel();
         }
 
         private VisualCard? CreateCard(string filePath)

@@ -243,7 +243,8 @@
                             Height="20"
                             MouseEnter="RemoveButton_MouseEnter"
                             MouseLeave="RemoveButton_MouseLeave"
-                            RenderTransformOrigin="0.5 0.5" Command="{Binding RemoveButtonCommand}">
+                            RenderTransformOrigin="0.5 0.5"
+                            Command="{Binding RemoveButtonCommand}">
                         <Button.RenderTransform>
                             <ScaleTransform x:Name="RemoveButtonScaleTransform"
                                             ScaleX="1"
@@ -320,6 +321,28 @@
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
+
+                <Button x:Name="StopButton" Margin="0 0 5 0"
+                        Width="18"
+                        Height="18"
+                        Padding="0"
+                        d:BorderBrush="red"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Cursor="Hand"
+                        MouseEnter="StopButton_MouseEnter"
+                        MouseLeave="StopButton_MouseLeave"
+                        RenderTransformOrigin="0.5 0.5"
+                        Command="{Binding StopCommand}">
+                    <Button.RenderTransform>
+                        <ScaleTransform x:Name="StopButtonRenderTransform"
+                                        ScaleX="1"
+                                        ScaleY="1" />
+                    </Button.RenderTransform>
+                    <Button.Content>
+                        <svg:SvgViewbox  Source="/Resources/stop.svg"></svg:SvgViewbox>
+                    </Button.Content>
+                </Button>
 
                 <hc:WaveProgressBar Value="{Binding Progress}"
                                     Minimum="0"

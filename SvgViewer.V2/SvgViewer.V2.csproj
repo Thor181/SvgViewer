@@ -22,6 +22,7 @@
     <ItemGroup>
       <None Remove="Resources\favorite.svg" />
       <None Remove="Resources\favorite_out.svg" />
+      <None Remove="Resources\stop.svg" />
       <None Remove="Resources\trash.svg" />
       <None Remove="Template.png" />
     </ItemGroup>
@@ -44,6 +45,7 @@
     <ItemGroup>
       <Resource Include="Resources\favorite.svg" />
       <Resource Include="Resources\favorite_out.svg" />
+      <Resource Include="Resources\stop.svg" />
       <Resource Include="Resources\Template.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
@@ -74,8 +76,9 @@
         <Exec Command="dotnet publish $(MSBuildProjectFullPath) -c Release -o $(SimpleDir)\exe\"></Exec> <!--simple publish-->
 		<Exec Condition="Exists('$(Path7z)')" Command="$(Path7z) a $(SimpleDir)\arc\$(MSBuildProjectName).7z  $(SimpleDir)\exe\*"></Exec> <!--archive simple published-->
         <Message Text="Simple publish is completed" Importance="high"></Message> <!--message-->
-        <Exec Command="dotnet publish $(MSBuildProjectFullPath) -a x86 -c Release --sc -o $(SelfDir)\exe\"></Exec>
-		<Exec Condition="Exists('$(Path7z)')" Command="$(Path7z) a $(SelfDir)\arc\$(MSBuildProjectName).7z  $(SelfDir)\exe\*"></Exec>
+		
+		<Exec Command="dotnet publish $(MSBuildProjectFullPath) -a x86 -c Release --sc -o $(SelfDir)\exe\"></Exec>
+		<Exec Condition="Exists('$(Path7z)')" Command="$(Path7z) a $(SelfDir)\arc\$(MSBuildProjectName)-SelfContained.7z  $(SelfDir)\exe\*"></Exec>
         <Message Text="SelfContained publish is completed" Importance="high"></Message>
 		
     </Target>

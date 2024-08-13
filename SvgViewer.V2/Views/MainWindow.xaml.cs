@@ -62,5 +62,17 @@ namespace SvgViewer.V2
             RemoveButtonScaleTransform.ScaleX = 1;
             RemoveButtonScaleTransform.ScaleY = 1;
         }
+
+        private void StopButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+            StopButtonRenderTransform.ScaleX = 1.07;
+            StopButtonRenderTransform.ScaleY = 1.07;
+        }
+
+        private void StopButton_MouseLeave(object sender, MouseEventArgs e)
+        {
+            StopButtonRenderTransform.ScaleX = 1;
+            StopButtonRenderTransform.ScaleY = 1;
+        }
     }
 }
