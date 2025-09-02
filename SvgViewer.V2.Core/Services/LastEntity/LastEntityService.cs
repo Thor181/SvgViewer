@@ -1,14 +1,11 @@
-﻿using SvgViewer.V2.Models;
-using SvgViewer.V2.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace SvgViewer.V2.Services
+namespace SvgViewer.V2.Core.Services.LastEntity
 {
     public class LastEntityService
     {
@@ -71,7 +68,7 @@ namespace SvgViewer.V2.Services
             if (!ContainsWithIgnoreCase(lastEntities, path))
                 return;
 
-            lastEntities.RemoveAll(x =>  x.Path == path);
+            lastEntities.RemoveAll(x => x.Path == path);
 
             if (placement == Placement.End)
                 lastEntities.Add(new LastEntity(path));

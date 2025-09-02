@@ -5,6 +5,10 @@ VisualStudioVersion = 17.11.34929.205
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvgViewer.V2", "SvgViewer.V2\SvgViewer.V2.csproj", "{A6C8E6AD-D858-4E9C-AE81-AE375687DB50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvgViewer.V2.Avalonia", "SvgViewer.V2.Avalonia\SvgViewer.V2.Avalonia.csproj", "{6024B986-7B09-42D1-A937-CEDA87A8D438}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvgViewer.V2.Core", "SvgViewer.V2.Core\SvgViewer.V2.Core.csproj", "{68540CB0-54A1-44F5-97D7-6C7DB7D99830}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{A6C8E6AD-D858-4E9C-AE81-AE375687DB50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6C8E6AD-D858-4E9C-AE81-AE375687DB50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6C8E6AD-D858-4E9C-AE81-AE375687DB50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6024B986-7B09-42D1-A937-CEDA87A8D438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6024B986-7B09-42D1-A937-CEDA87A8D438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6024B986-7B09-42D1-A937-CEDA87A8D438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6024B986-7B09-42D1-A937-CEDA87A8D438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68540CB0-54A1-44F5-97D7-6C7DB7D99830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68540CB0-54A1-44F5-97D7-6C7DB7D99830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68540CB0-54A1-44F5-97D7-6C7DB7D99830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68540CB0-54A1-44F5-97D7-6C7DB7D99830}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
